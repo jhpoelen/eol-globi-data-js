@@ -28,7 +28,7 @@ globiData.urlForTaxonInteractionQuery = function (search) {
         uri = uri + "/interaction";
     }
 
-    uri =  uri + '?type=json.v2';
+    uri = uri + '?type=json.v2';
     if (search.location) {
         uri = uri + '&' + locationQuery(search.location);
     }
@@ -40,15 +40,8 @@ globiData.urlForTaxonImageQuery = function (scientificName) {
 };
 
 globiData.findSpeciesInteractions = function (search, callback) {
-    var uri = "";
-    if (search.sourceTaxonScientificName) {
-        uri = globiData.urlForTaxonInteractionQuery(search);
-    } else if (search.location) {
-        var json_local = false;
-        uri = json_local ? "interactions.json" : "http://trophicgraph.com:8080/interaction?type=json.v2&" + locationQuery(location);
-    } else {
-        callback("search parameters [" + search + "] not supported");
-    }
+    var uri = globiData.urlForTaxonInteractionQuery(search);
+    console.log('requesting interaction data from: [' + uri + ']');
     d3.json(uri, callback);
 };
 
