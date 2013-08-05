@@ -5,3 +5,5 @@ eol-globi-data-js
 
 Javascript API for accessing global species interaction data.
 
+If you are not using npm (node package manager), please use globi-data-dist.js to embed this library into your app.
+
