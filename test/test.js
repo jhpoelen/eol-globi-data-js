@@ -19,3 +19,9 @@ test('url for interaction with target', function(t) {
     var search = {"sourceTaxonScientificName": "Homo sapiens", "interactionType": "preysOn", "targetTaxonScientificName": "Canis lupus"};
 	t.equal(globiData.urlForTaxonInteractionQuery(search), 'http://trophicgraph.com:8080/taxon/Homo%20sapiens/preysOn/Canis%20lupus?type=json.v2');
 });
+
+test('url for interaction location only', function(t) {
+	t.plan(1);
+    var search = {"location": {"lat": 10.2, "lng":12.2}};
+	t.equal(globiData.urlForTaxonInteractionQuery(search), 'http://trophicgraph.com:8080/interaction?type=json.v2&lat=10.2&lng=12.2&');
+});
