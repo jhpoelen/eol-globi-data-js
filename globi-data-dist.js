@@ -1,42 +1,58 @@
 (function(e){if("function"==typeof bootstrap)bootstrap("globi-data",e);else if("object"==typeof exports)module.exports=e();else if("function"==typeof define&&define.amd)define(e);else if("undefined"!=typeof ses){if(!ses.ok())return;ses.makeGlobiData=e}else"undefined"!=typeof window?window.globiData=e():global.globiData=e()})(function(){var define,ses,bootstrap,module,exports;
 return (function(e,t,n){function i(n,s){if(!t[n]){if(!e[n]){var o=typeof require=="function"&&require;if(!s&&o)return o(n,!0);if(r)return r(n,!0);throw new Error("Cannot find module '"+n+"'")}var u=t[n]={exports:{}};e[n][0].call(u.exports,function(t){var r=e[n][1][t];return i(r?r:t)},u,u.exports)}return t[n].exports}var r=typeof require=="function"&&require;for(var s=0;s<n.length;s++)i(n[s]);return i})({1:[function(require,module,exports){
-var d3 = require("d3");
+var d3 = require('d3');
 
 var globiData = {};
 globiData.d3 = d3;
 
-var urlPrefix = "http://trophicgraph.com:8080";
+var urlPrefix = 'http://trophicgraph.com:8080';
 
-var locationQuery = function (location) {
-    var locationQuery = "";
-    for (var elem in location) {
-        locationQuery += elem + "=" + location[elem] + "&";
-    }
-    return locationQuery;
-}
 
 
 globiData.urlForTaxonInteractionQuery = function (search) {
     var uri = urlPrefix;
 
     if (search.sourceTaxonScientificName) {
-        uri = uri + "/taxon/" + encodeURIComponent(search.sourceTaxonScientificName) + "/" + search.interactionType;
+        uri = uri + '/taxon/' + encodeURIComponent(search.sourceTaxonScientificName) + '/' + search.interactionType;
         if (search.targetTaxonScientificName) {
-            uri = uri + "/" + encodeURIComponent(search.targetTaxonScientificName);
+            uri = uri + '/' + encodeURIComponent(search.targetTaxonScientificName);
         }
     } else {
-        uri = uri + "/interaction";
+        uri = uri + '/interaction';
+    }
+
+    var locationQuery = function (location) {
+        var locationQuery = '';
+        for (var elem in location) {
+            locationQuery += elem + '=' + location[elem] + '&';
+        }
+        return locationQuery;
     }
 
     uri = uri + '?type=json.v2';
     if (search.location) {
         uri = uri + '&' + locationQuery(search.location);
     }
+
+    function addTaxonQuery(taxonNames, elemName) {
+        if (taxonNames) {
+            var taxonQuery = '';
+            for (var name in taxonNames) {
+                taxonQuery += elemName + '=' + encodeURIComponent(taxonNames[name]) + '&';
+            }
+            uri = uri + taxonQuery;
+        }
+
+    }
+
+    addTaxonQuery(search.sourceTaxa, 'sourceTaxon');
+    addTaxonQuery(search.targetTaxa, 'targetTaxon');
+
     return uri;
 };
 
 globiData.urlForTaxonImageQuery = function (scientificName) {
-    return urlPrefix + "/imagesForName/" + encodeURIComponent(scientificName);
+    return urlPrefix + '/imagesForName/' + encodeURIComponent(scientificName);
 };
 
 globiData.findSpeciesInteractions = function (search, callback) {

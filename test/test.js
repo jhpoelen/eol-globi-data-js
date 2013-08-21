@@ -3,25 +3,31 @@ var test = require('tape');
 
 test('url for taxon info', function(t) {
 	t.plan(1);
-	t.equal(globiData.urlForTaxonImageQuery("Homo sapiens"), 'http://trophicgraph.com:8080/imagesForName/Homo%20sapiens');
+	t.equal(globiData.urlForTaxonImageQuery('Homo sapiens'), 'http://trophicgraph.com:8080/imagesForName/Homo%20sapiens');
 
 });
 
 test('url for interaction no target', function(t) {
 	t.plan(1);
-    var search = {"sourceTaxonScientificName": "Homo sapiens", "interactionType": "preysOn"};
+    var search = {'sourceTaxonScientificName': 'Homo sapiens', 'interactionType': 'preysOn'};
 	t.equal(globiData.urlForTaxonInteractionQuery(search), 'http://trophicgraph.com:8080/taxon/Homo%20sapiens/preysOn?type=json.v2');
 
 });
 
 test('url for interaction with target', function(t) {
 	t.plan(1);
-    var search = {"sourceTaxonScientificName": "Homo sapiens", "interactionType": "preysOn", "targetTaxonScientificName": "Canis lupus"};
+    var search = {'sourceTaxonScientificName': 'Homo sapiens', 'interactionType': 'preysOn', 'targetTaxonScientificName': 'Canis lupus'};
 	t.equal(globiData.urlForTaxonInteractionQuery(search), 'http://trophicgraph.com:8080/taxon/Homo%20sapiens/preysOn/Canis%20lupus?type=json.v2');
 });
 
 test('url for interaction location only', function(t) {
 	t.plan(1);
-    var search = {"location": {"lat": 10.2, "lng":12.2}};
+    var search = {'location': {'lat': 10.2, 'lng':12.2}};
 	t.equal(globiData.urlForTaxonInteractionQuery(search), 'http://trophicgraph.com:8080/interaction?type=json.v2&lat=10.2&lng=12.2&');
+});
+
+test('url for interaction location only source taxon, target taxon', function(t) {
+	t.plan(1);
+    var search = {'location': {'lat': 10.2, 'lng':12.2}, 'sourceTaxa': ['Mammalia'], 'targetTaxa': ['Insecta', 'Ariopsis felis']};
+	t.equal(globiData.urlForTaxonInteractionQuery(search), 'http://trophicgraph.com:8080/interaction?type=json.v2&lat=10.2&lng=12.2&sourceTaxon=Mammalia&targetTaxon=Insecta&targetTaxon=Ariopsis%20felis&');
 });
