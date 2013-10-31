@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <script src="../globi-data-dist.js" charset="utf-8">
+    </script>
+    <script type="text/javascript" charset="utf-8">
+        window.onload = function() {
+            var consoleDiv = document.getElementById('console');
+
+            // lookup some species by some string 'sea otter'
+            var matcher = globiData.findCloseTaxonMatches('sea otter');
+            matcher.on('ready', function() {
+                matcher.closeMatches.forEach(function(closeMatch){
+                    // log scientific names of matches
+                    console.log(closeMatch.scientificName);
+                    var p = document.createElement('p');
+                    p.innerHTML = 'close match for sea otter [' + closeMatch.scientificName + ']';
+                    consoleDiv.appendChild(p);
+                });
+            });
+
+            // find out what a sea otter (Enhydra lutris) eats. . .
+            var search =  {sourceTaxonScientificName: 'Enhydra lutris', interactionType: 'preysOn'};
+            var seaOtterPrey = globiData.findSpeciesInteractions(search);
+            seaOtterPrey.on('ready', function() {
+                seaOtterPrey.interactions.forEach(function(interaction) {
+                    var p = document.createElement('p');
+                    p.innerHTML = '[' + interaction.source.name  + '] preys on ['  + interaction.target.name + ']';
+                    consoleDiv.appendChild(p);
+                });
+            });
+
+            // lookup some more info (including image urls) about the sea otter
+            var info = globiData.findTaxonInfo('Enhydra lutris');
+            info.on('ready', function() {
+                var name = info.taxonInfo.commonName + ' (<i>' + info.taxonInfo.scientificName + '</i>)';
+                var infoDiv = document.createElement('div');
+                infoDiv.innerHTML = '<table class="image"><caption align="bottom">' + name + '</caption>'
+                        + '<tr><td><img src="' + info.taxonInfo.thumbnailURL + '"/></td></tr></table>';
+                consoleDiv.appendChild(infoDiv);
+            });
+        };
+
+    </script>
+</head>
+<body>
+    <div id='console'></div>
+</body>

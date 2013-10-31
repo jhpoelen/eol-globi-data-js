@@ -29,3 +29,11 @@ test('url for interaction location only source taxon, target taxon', function(t)
     var search = {'location': {'lat': 10.2, 'lng':12.2}, 'sourceTaxa': ['Mammalia'], 'targetTaxa': ['Insecta', 'Ariopsis felis']};
 	t.equal(globiData.urlForTaxonInteractionQuery(search), 'http://trophicgraph.com:8080/interaction?type=json.v2&lat=10.2&lng=12.2&sourceTaxon=Mammalia&targetTaxon=Insecta&targetTaxon=Ariopsis%20felis&');
 });
+
+
+test('url for search box location only source taxon, target taxon', function(t) {
+	t.plan(1);
+    var location = {nw_lat:41.574361, nw_lng:-125.53344800000002, se_lat:32.750323, se_lng: -114.74487299999998};
+    var search = {location: location, sourceTaxa: ['Animalia'], targetTaxa: ['Insecta']};
+	t.equal(globiData.urlForTaxonInteractionQuery(search), 'http://trophicgraph.com:8080/interaction?type=json.v2&nw_lat=41.574361&nw_lng=-125.53344800000002&se_lat=32.750323&se_lng=-114.74487299999998&sourceTaxon=Animalia&targetTaxon=Insecta&');
+});

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <script src="../globi-data-dist.js" charset="utf-8">
+    </script>
+    <script type="text/javascript" charset="utf-8">
+        window.onload = function() {
+            var matcher = globiData.findCloseTaxonMatches('sea otter');
+            matcher.on('ready', function() {
+                if (matcher.closeMatches.length > 0) {
+                    var firstMatch = matcher.closeMatches[0];
+                    var englishName = '';
+                    firstMatch.commonNames.forEach(function(element) {
+                        console.log(element.name);
+                        if (element.lang.contains('en')) {
+                            englishName = element.name;
+                        }
+                    });
+
+
+                    var info = globiData.findTaxonInfo(firstMatch.scientificName);
+                    info.on('ready', function() {
+                        var name = englishName + ' (<i>' + firstMatch.scientificName + '</i>)';
+                        var sourceDiv = document.getElementById('sourceTaxon');
+                        sourceDiv.innerHTML = '<table class="image"><caption align="bottom">' + name + '</caption>'
+                                + '<tr><td><img src="' + info.taxonInfo.thumbnailURL + '"/></td></tr></table>';
+                    });
+
+                    var interactionType = 'preysOn';
+                    var interElem = document.getElementById('interaction');
+                    interElem.innerHTML = interactionType
+
+                    var prey = globiData.findSpeciesInteractions({sourceTaxonScientificName: firstMatch.scientificName,  interactionType: interactionType});
+                    prey.on('ready', function() {
+                        prey.interactions.forEach(function(element) {
+                            var preyInfo = globiData.findTaxonInfo(element.target.name);
+                            preyInfo.on('ready', function() {
+                                var targetDiv = document.getElementById('targetTaxa');
+                                var preyDiv = document.createElement('div');
+                                var preyName = preyInfo.taxonInfo.commonName + ' (<i>' + preyInfo.taxonInfo.scientificName + '</i>)';
+                                preyDiv.innerHTML = '<table class="image"><caption align="bottom">' + preyName + '</caption>'
+                                        + '<tr><td><img src="' + preyInfo.taxonInfo.thumbnailURL + '"/></td></tr></table>';
+                                targetDiv.appendChild(preyDiv);
+                            });
+
+                        });
+                    });
+                }
+            });
+        };
+
+    </script>
+</head>
+<body>
+    <div id='sourceTaxon'></div>
+    <div id='interaction'></div>
+    <div id='targetTaxa'></div>
+</body>
