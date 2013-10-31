@@ -1,10 +1,8 @@
-var d3 = require('d3');
+var EventEmitter = require('events').EventEmitter;
 
 var globiData = {};
-globiData.d3 = d3;
 
 var urlPrefix = 'http://trophicgraph.com:8080';
-
 
 
 globiData.urlForTaxonInteractionQuery = function (search) {
@@ -53,14 +51,44 @@ globiData.urlForTaxonImageQuery = function (scientificName) {
     return urlPrefix + '/imagesForName/' + encodeURIComponent(scientificName);
 };
 
-globiData.findSpeciesInteractions = function (search, callback) {
+var createReq = function () {
+    var req;
+    if (window.XMLHttpRequest) { // Mozilla, Safari, ...
+        req = new XMLHttpRequest();
+    } else if (window.ActiveXObject) { // IE
+        try {
+            req = new ActiveXObject('Msxml2.XMLHTTP');
+        } catch (e) {
+            try {
+                req = new ActiveXObject('Microsoft.XMLHTTP');
+            } catch (e) {
+            }
+        }
+    }
+    return req;
+};
+
+globiData.findSpeciesInteractions = function (search) {
+    var ee = new EventEmitter();
     var uri = globiData.urlForTaxonInteractionQuery(search);
+    var interactions = [];
     console.log('requesting interaction data from: [' + uri + ']');
-    d3.json(uri, callback);
+    var req = createReq();
+    req.open('GET', uri ,true);
+    req.onreadystatechange = function() {
+        if (req.readyState === 4 && req.status === 200) {
+            var resp = JSON.parse(req.responseText);
+            console.log('received from [' + uri + '] resp [' + resp + ']');
+            ee.emit('ready');
+        }
+    };
+    req.send(null);
+    ee.interactions = interactions;
+    return ee;
 };
 
 globiData.findTaxonInfo = function (scientificName, callback) {
-    d3.json(globiData.urlForTaxonImageQuery(scientificName), callback)
+    //d3.json(globiData.urlForTaxonImageQuery(scientificName), callback)
 };
 
 
