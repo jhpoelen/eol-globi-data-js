@@ -107,10 +107,10 @@ Provides a list of interactions to callback specific to search options.  Possibl
 ]
  ```
 
- ## globiData.findCloseTaxonMatches
+ ## globiData.findCloseTaxonMatches(searchString)
 Find close taxonomic (organism, species names) matches to provided input string.
 
-For instance, close taxonomic matches for ```sea ottr``` are:
+For instance, close taxonomic matches with search string ```sea ottr``` are:
 
 ```javascript
 { [{scientificName: 'Enhydra lutris',
