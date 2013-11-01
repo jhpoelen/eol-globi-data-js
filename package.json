@@ -1,7 +1,7 @@
 {
     "name": "globi-data",
-    "version": "0.0.6",
-    "description": "library to access EOL's Global Biotic Interactions Data http://github.com/jhpoelen/eol-globi-data",
+    "version": "0.0.8",
+    "description": "Explore species interactions: who eats who, or who is a host for whom. Data provided by EOL's GloBI (Global Biotic Interactions).",
     "main": "globi-data.js",
     "directories": {
         "example": "example"
@@ -10,7 +10,8 @@
 
     },
     "devDependencies": {
-        "tape": "~1.0.4"
+        "tape": "~1.0.4",
+        "testling": "~1.5.3"
     },
     "testling": {
         "files": "test/*.js",
@@ -18,7 +19,7 @@
     },
 
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
+        "test": "testling",
         "prepublish": "browserify . --standalone globi-data -o globi-data-dist.js"
     },
 
@@ -28,13 +29,18 @@
     },
     "keywords": [
         "eol",
+        "encyclopedia of life",
+        "sglobal biotic interactions",
         "species",
         "interactions",
         "bioinformatics",
         "browser",
         "ecology",
+        "food web",
+        "foodweb",
         "biodiversity",
-        "big data"
+        "big data",
+        "small data"
     ],
     "author": "Jorrit Poelen",
     "license": "BSD",

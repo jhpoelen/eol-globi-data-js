@@ -1,5 +1,3 @@
-var EventEmitter = require('events').EventEmitter;
-
 var globiData = {};
 
 var urlPrefix = 'http://trophicgraph.com:8080';
@@ -71,43 +69,43 @@ var createReq = function () {
     return req;
 };
 
-globiData.findSpeciesInteractions = function (search) {
-    var ee = new EventEmitter();
+globiData.findInteractionTypes = function(callback) {
+    var req = createReq();
+    req.open('GET', urlPrefix + '/interactionTypes', true);
+    req.onreadystatechange = function() {
+        if (req.readyState === 4 && req.status === 200) {
+            callback(JSON.parse(req.responseText));
+        }
+    };
+    req.send(null);
+}
+
+globiData.findSpeciesInteractions = function (search, callback) {
     var uri = globiData.urlForTaxonInteractionQuery(search);
     var req = createReq();
-    req.open('GET', uri ,true);
+    req.open('GET', uri, true);
     req.onreadystatechange = function() {
         if (req.readyState === 4 && req.status === 200) {
-            console.log('requesting [' + uri + ']');
-            ee.interactions = JSON.parse(req.responseText);
-            ee.emit('ready');
+            console.log(req.responseText);
+            callback(JSON.parse(req.responseText));
         }
     };
     req.send(null);
-    ee.interactions = [];
-    return ee;
 };
 
-globiData.findTaxonInfo = function (scientificName) {
-    var ee = new EventEmitter();
+globiData.findTaxonInfo = function (scientificName, callback) {
     var uri = globiData.urlForTaxonImageQuery(scientificName);
-    console.log('requesting taxon image data from: [' + uri + ']');
     var req = createReq();
-    req.open('GET', uri ,true);
+    req.open('GET', uri, true);
     req.onreadystatechange = function() {
         if (req.readyState === 4 && req.status === 200) {
-            console.log('received some data [' + req.responseText + ']');
-            ee.taxonInfo = JSON.parse(req.responseText);
-            ee.emit('ready');
+            callback(JSON.parse(req.responseText));
         }
     };
     req.send(null);
-    ee.taxonInfo = { scientificName: scientificName };
-    return ee;
 };
 
-globiData.findCloseTaxonMatches = function (name) {
-    var ee = new EventEmitter();
+globiData.findCloseTaxonMatches = function (name, callback) {
     var uri = globiData.urlForFindCloseTaxonMatches(name);
     var req = createReq();
     req.open('GET', uri ,true);
@@ -115,6 +113,7 @@ globiData.findCloseTaxonMatches = function (name) {
         if (req.readyState === 4 && req.status === 200) {
             var response = JSON.parse(req.responseText);
             var data = response.data;
+            var closeMatches = [];
             data.forEach(function(element, index) {
                 var commonNamesString = element[1];
                 var commonNamesSplit = commonNamesString.split('|');
@@ -126,14 +125,12 @@ globiData.findCloseTaxonMatches = function (name) {
                     }
                 });
                 var path = element[2].split('|');
-                ee.closeMatches[index] = { scientificName: element[0], commonNames: commonNames, path: path};
+                closeMatches[index] = { scientificName: element[0], commonNames: commonNames, path: path};
             });
-            ee.emit('ready');
+            callback(closeMatches);
         }
     };
     req.send(null);
-    ee.closeMatches = [];
-    return ee;
 };
 
 module.exports = globiData;

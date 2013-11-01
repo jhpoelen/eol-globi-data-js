@@ -9,37 +9,37 @@
             var consoleDiv = document.getElementById('console');
 
             // lookup some species by some string 'sea otter'
-            var matcher = globiData.findCloseTaxonMatches('sea otter');
-            matcher.on('ready', function() {
-                matcher.closeMatches.forEach(function(closeMatch){
+            var closeMatchCallback = function(closeMatches) {
+                closeMatches.forEach(function(closeMatch){
                     // log scientific names of matches
                     console.log(closeMatch.scientificName);
                     var p = document.createElement('p');
                     p.innerHTML = 'close match for sea otter [' + closeMatch.scientificName + ']';
                     consoleDiv.appendChild(p);
                 });
-            });
+            };
+            globiData.findCloseTaxonMatches('sea otter', closeMatchCallback);
 
             // find out what a sea otter (Enhydra lutris) eats. . .
             var search =  {sourceTaxonScientificName: 'Enhydra lutris', interactionType: 'preysOn'};
-            var seaOtterPrey = globiData.findSpeciesInteractions(search);
-            seaOtterPrey.on('ready', function() {
-                seaOtterPrey.interactions.forEach(function(interaction) {
+            var callback = function(interactions) {
+                interactions.forEach(function(interaction) {
                     var p = document.createElement('p');
                     p.innerHTML = '[' + interaction.source.name  + '] preys on ['  + interaction.target.name + ']';
                     consoleDiv.appendChild(p);
                 });
-            });
+            };
+            globiData.findSpeciesInteractions(search, callback);
 
             // lookup some more info (including image urls) about the sea otter
-            var info = globiData.findTaxonInfo('Enhydra lutris');
-            info.on('ready', function() {
-                var name = info.taxonInfo.commonName + ' (<i>' + info.taxonInfo.scientificName + '</i>)';
+            var infoCallback = function(taxonInfo) {
+                var name = taxonInfo.commonName + ' (<i>' + taxonInfo.scientificName + '</i>)';
                 var infoDiv = document.createElement('div');
                 infoDiv.innerHTML = '<table class="image"><caption align="bottom">' + name + '</caption>'
-                        + '<tr><td><img src="' + info.taxonInfo.thumbnailURL + '"/></td></tr></table>';
+                        + '<tr><td><img src="' + taxonInfo.thumbnailURL + '"/></td></tr></table>';
                 consoleDiv.appendChild(infoDiv);
-            });
+            };
+            globiData.findTaxonInfo('Enhydra lutris', infoCallback);
         };
 
     </script>
