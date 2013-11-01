@@ -107,6 +107,18 @@ Provides a list of interactions to callback specific to search options.  Possibl
 ]
  ```
 
+ ## globiData.findCloseTaxonMatches
+Find close taxonomic (organism, species names) matches to provided input string.
+
+For instance, close taxonomic matches for ```sea ottr``` are:
+
+```javascript
+{ [{scientificName: 'Enhydra lutris',
+    commonNames: [ { name: 'Seeotter', lang: 'de' },{ name: 'sea otter', lang: 'en'} ],
+     path: ['Animalia', 'Chordata', 'Mammalia', 'Carnivora', 'Mustelidae', 'Enhydra', 'Enhydra lutris']},
+   ...]
+```
+
 # Note
 
 If you are not using npm (node package manager), please use globi-data-dist.js to embed this library into your app.

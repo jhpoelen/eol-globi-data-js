@@ -86,7 +86,6 @@ globiData.findSpeciesInteractions = function (search, callback) {
     req.open('GET', uri, true);
     req.onreadystatechange = function() {
         if (req.readyState === 4 && req.status === 200) {
-            console.log(req.responseText);
             callback(JSON.parse(req.responseText));
         }
     };
