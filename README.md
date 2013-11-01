@@ -77,7 +77,7 @@ Provides a list of interactions to callback specific to search options.  Possibl
  ```javascript
  options = {sourceTaxonScientificName: 'Ariopsis felis',
             interactionType: 'preysOn',
-            nw_lat:30.52, nw_lng:-99.51, se_lat: 20.52, se_lng=-82.75}
+            nw_lat:30.52, nw_lng:-99.51, se_lat: 20.52, se_lng:-82.75}
 
  ```
 
@@ -86,19 +86,24 @@ Provides a list of interactions to callback specific to search options.  Possibl
   options = {sourceTaxonScientificName: 'Ariopsis felis',
                targetTaxonScientificName: 'Arthropoda'
              interactionType: 'preysOn',
-             nw_lat:30.52, nw_lng:-99.51, se_lat: 20.52, se_lng=-82.75}
+             nw_lat:30.52, nw_lng:-99.51, se_lat: 20.52, se_lng:-82.75}
 
   ```
 
  example of returned interactions: two interactions where Hardhead Catfish _(Ariopsis felis)_ eats Chordates _(Chordata)_ and Palaemonid Shrimps _(Palaemonidae)_:
 
  ```javascript
-[{"source":{"name":"Ariopsis felis"}
-    ,"target":{"name":"Chordata"},
-    "type":"preysOn"},
- {"source":{"name":"Ariopsis felis"},
+[
+    {
+        "source":{"name":"Ariopsis felis"},
+        "target":{"name":"Chordata"},
+        "type":"preysOn"
+    },
+    {
+        "source":{"name":"Ariopsis felis"},
         "target":{"name":"Palaemonidae"},
-            "type":"preysOn"}
+        "type":"preysOn"
+    }
 ]
  ```
 
