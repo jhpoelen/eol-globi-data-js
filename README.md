@@ -50,7 +50,7 @@ globiData.findTaxonInfo('Enhydra lutris', infoCallback);
 var globiData = require('globi-data.js');
 ```
 
-## globiData.findInteractionTypes
+## globiData.findInteractionTypes(callback)
 Returns available interaction types.
 
 ## globiData.findSpeciesInteractions(searchOptions, callback)
@@ -107,7 +107,7 @@ Provides a list of interactions to callback specific to search options.  Possibl
 ]
  ```
 
- ## globiData.findCloseTaxonMatches(searchString)
+ ## globiData.findCloseTaxonMatches(searchString, callback)
 Find close taxonomic (organism, species names) matches to provided input string.
 
 For instance, close taxonomic matches with search string ```sea ottr``` are:
@@ -118,6 +118,64 @@ For instance, close taxonomic matches with search string ```sea ottr``` are:
      path: ['Animalia', 'Chordata', 'Mammalia', 'Carnivora', 'Mustelidae', 'Enhydra', 'Enhydra lutris']},
    ...]
 ```
+
+## globiData.findSources(callback)
+Find the sources that contributed one or more studies.  Result is a list of string.
+
+```javascript
+// example of results
+
+
+```
+
+## globiData.findStudyStats(search, callback)
+Find statistics about individual studies that contributed interaction datasets to GloBI.  Optionally, you can provide a source variable in the search object to limit studies to a specific source.
+
+```javascript
+// stats for only SPIRE studies
+var search = { source: 'SPIRE' }
+var callback = function(statList) {
+    console.log('study statistics:' + statList);
+}
+globi.findStudyStats(search, callback);
+
+// stats for all studies, notice the empty search option object
+globi.findStudyStats({}, callback);
+```
+
+example of information retrieved:
+```javascript
+[ { reference: 'Nick Fotheringham Effects of Offshore Oil Field Structures on Their Biotic Environment: Benthos and Plankton',
+totalInteractions: 138,
+totalSourceTaxa: 23,
+totalTargetTaxa: 28 },
+{ reference: 'Christian RR, Luczkovich JJ (1999) Organizing and understanding a winter\'s seagrass foodweb network through effective trophic levels. Ecol Model 117:99-124',
+totalInteractions: 270,
+totalSourceTaxa: 82,
+totalTargetTaxa: 85 } ]
+```
+
+## globiData.findStats(search, callback)
+Find statistics across all datasets.  Optionally you can limit the statistics to studies contributed by a specific source.
+
+```javascript
+// stats for only SPIRE studies
+var search = { source: 'SPIRE' }
+var callback = function(stats) {
+    console.log('aggregate statistics:' + statList);
+}
+globi.findStats(search, callback);
+
+// stats aggregated across all studies, notice the empty search option object
+globi.findStats({}, callback);
+```
+
+example of resulting statistics object:
+```javascript
+{ numberOfStudies: 251, totalInteractions: 431842, totalSourceTaxa: 10194, totalTargetTaxa: 19477 }
+```
+
+
 
 # Note
 

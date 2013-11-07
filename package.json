@@ -1,6 +1,6 @@
 {
     "name": "globi-data",
-    "version": "0.0.9",
+    "version": "0.0.10",
     "description": "Explore species interactions: who eats who, or who is a host for whom. Data provided by EOL's GloBI (Global Biotic Interactions).",
     "main": "globi-data.js",
     "directories": {
