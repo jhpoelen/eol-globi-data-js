@@ -53,15 +53,17 @@ Make sure to include eol-globi-data-js in your project / page.
 var globiData = require('globi-data');
 ```
 
+for example node project that uses globi-data see: http://github.com/jhpoelen/eol-globi-js .
+
 ## Directly into html
  include [globi-data-dist.js](globi-data-dist.js) in your web resources and include using script tag.
 ```html
 ...
 <script src="globi-data-dist.js" charset="utf-8">
 ...
-
-
 ```
+
+For example web project, see github repository http://github.com/eol-globi/eol-globi.github.io that is deployed using github pages here: http://eol-globi.github.io .
 # methods
 
 
