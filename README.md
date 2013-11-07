@@ -44,11 +44,26 @@ globiData.findTaxonInfo('Enhydra lutris', infoCallback);
 
 [![Build Status](https://ci.testling.com/jhpoelen/eol-globi-data-js.png)](https://ci.testling.com/jhpoelen/eol-globi-data-js)
 
+# usage
+
+Make sure to include eol-globi-data-js in your project / page.
+
+## Node Package Manager (NPM)
+```javascript
+var globiData = require('globi-data');
+```
+
+## Directly into html
+ include [globi-data-dist.js](globi-data-dist.js) in your web resources and include using script tag.
+```html
+...
+<script src="globi-data-dist.js" charset="utf-8">
+...
+
+
+```
 # methods
 
-```javascript
-var globiData = require('globi-data.js');
-```
 
 ## globiData.findInteractionTypes(callback)
 Returns available interaction types.
@@ -174,9 +189,3 @@ example of resulting statistics object:
 ```javascript
 { numberOfStudies: 251, totalInteractions: 431842, totalSourceTaxa: 10194, totalTargetTaxa: 19477 }
 ```
-
-
-
-# Note
-
-If you are not using npm (node package manager), please use globi-data-dist.js to embed this library into your app.
