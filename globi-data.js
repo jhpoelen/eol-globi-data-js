@@ -1,3 +1,4 @@
+var nodeXHR = require("xmlhttprequest");
 var globiData = {};
 
 var urlPrefix = 'http://trophicgraph.com:8080';
@@ -54,9 +55,12 @@ globiData.urlForTaxonImageQuery = function (scientificName) {
 
 var createReq = function () {
     var req;
-    if (window.XMLHttpRequest) { // Mozilla, Safari, ...
+    if (typeof window === 'undefined') {
+        // perhaps running in node.js?
+        req = new nodeXHR.XMLHttpRequest();
+    } else if (window.XMLHttpRequest) { // Mozilla, Safari, ...
         req = new XMLHttpRequest();
-    } else if (window.ActiveXObject) { // IE
+    } else if ((typeof window !== 'undefined') && window.ActiveXObject) { // IE
         try {
             req = new ActiveXObject('Msxml2.XMLHTTP');
         } catch (e) {
