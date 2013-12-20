@@ -23,10 +23,17 @@ test('find close taxon matches', function (t) {
     t.plan(4);
     var callback = function (closeMatches) {
         t.ok(closeMatches.length > 0, 'found at least one match');
-        var firstMatch = closeMatches[0];
-        t.equal(firstMatch.scientificName, 'Mutinus caninus');
-        t.ok(firstMatch.commonNames.length > 0, 'expected at least one common name');
-        t.ok(firstMatch.path.length > 0, 'expected some parent taxa');
+        var foundMuntinusCaninus = false;
+		var foundAtLeastSomeCommonNames = false;
+		var foundAtLeastSomePaths = false;
+		closeMatches.forEach(function(match) {
+			foundMuntinusCaninus = foundMuntinusCaninus || match.scientificName === 'Mutinus caninus';
+			foundAtLeastSomeCommonNames = foundAtLeastSomeCommonNames || match.commonNames.length > 0;
+			foundAtLeastSomePaths = foundAtLeastSomePaths || match.path.length > 0;
+		});
+        t.ok(foundMuntinusCaninus, 'expected Mutinus caninus');
+        t.ok(foundAtLeastSomeCommonNames, 'expected at least one common name');
+        t.ok(foundAtLeastSomePaths, 'expected some parent taxa');
 
     };
     globiData.findCloseTaxonMatches('Dog', callback);
