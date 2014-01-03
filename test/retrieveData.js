@@ -10,13 +10,25 @@ test('get species interactions', function (t) {
     var ee = globiData.findSpeciesInteractions(search, callback);
 });
 
-test('get taxonInfo interactions', function (t) {
+test('get information for one taxon name', function (t) {
     t.plan(2);
     var callback = function (taxonInfo) {
         t.equal('Hardhead Catfish', taxonInfo.commonName, 'should have a common name');
         t.equal('Ariopsis felis', taxonInfo.scientificName, 'should have a scientific name');
     };
     globiData.findTaxonInfo('Ariopsis felis', callback);
+});
+
+
+test('get information for two taxon names', function (t) {
+    t.plan(4);
+    var callback = function (taxonInfo) {
+        t.equal('Human', taxonInfo[0].commonName, 'should have a common name');
+        t.equal('Homo sapiens', taxonInfo[0].scientificName, 'should have a scientific name');
+        t.equal('Hardhead Catfish', taxonInfo[1].commonName, 'should have a common name');
+        t.equal('Ariopsis felis', taxonInfo[1].scientificName, 'should have a scientific name');
+    };
+    globiData.findTaxaInfo(['Homo sapiens','Ariopsis felis'], callback);
 });
 
 test('find close taxon matches', function (t) {
