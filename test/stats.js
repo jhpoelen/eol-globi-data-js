@@ -34,11 +34,12 @@ test('find statistics by studies from specific source', function (t) {
 });
 
 test('get statistics for studies', function (t) {
-    t.plan(5);
+    t.plan(6);
     var callback = function (statList) {
         t.ok(statList.length > 0, 'should get at least one entry');
         var stats = statList[0];
         t.ok(stats.reference, 'should have a reference');
+        t.ok(stats.source, 'should have a source');
         t.ok(stats.totalInteractions > 0, 'should get at least one interaction');
         t.ok(stats.totalSourceTaxa > 0, 'should get at least one interaction');
         t.ok(stats.totalTargetTaxa > 0, 'should get at least one interaction');
@@ -47,11 +48,12 @@ test('get statistics for studies', function (t) {
 });
 
 test('get statistics for studies for specific source', function (t) {
-    t.plan(5);
+    t.plan(6);
     var callback = function (statList) {
         t.ok(statList.length > 0, 'should get at least one entry');
         var stats = statList[0];
         t.ok(stats.reference, 'should have a reference');
+        t.equal(stats.source, 'SPIRE');
         t.ok(stats.totalInteractions > 0, 'should get at least one interaction');
         t.ok(stats.totalSourceTaxa > 0, 'should get at least one interaction');
         t.ok(stats.totalTargetTaxa > 0, 'should get at least one interaction');

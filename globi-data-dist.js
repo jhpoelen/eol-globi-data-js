@@ -115,12 +115,24 @@ globiData.findStudyStats = function (search, callback) {
             var studyStats = [];
             for (var i = 0; i < resp.data.length; i++) {
                 var row = resp.data[i];
-                var reference = row[2];
-                var name = row[3];
-                if (name && name.length > 0) {
-                    reference = name + ' ' + reference;
-                }
-                studyStats[i] = { reference: reference, totalInteractions: row[4], totalSourceTaxa: row[5], totalTargetTaxa: row[6]};
+                var reference = '';
+				if (row.length > 8 && row[8].length > 0) {
+					reference = row[8];
+				} else {
+					reference = row[2];
+                	var name = row[3];
+                	if (name && name.length > 0) {
+                    	reference = name + ' ' + reference;
+                	}
+				}
+                var stats = { reference: reference, totalInteractions: row[4], totalSourceTaxa: row[5], totalTargetTaxa: row[6]};
+				if (row.length > 9 && row[9].length > 0) {
+					stats.doi = row[9];
+				}
+				if (row.length > 10 && row[10].length > 0) {
+					stats.source = row[10];
+				}
+				studyStats[i] = stats;
             }
             callback(studyStats);
         }
