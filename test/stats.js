@@ -11,10 +11,11 @@ test('get data set sources', function (t) {
 });
 
 test('find statistics across studies', function (t) {
-    t.plan(4);
+    t.plan(5);
     var callback = function (stats) {
         console.log(stats);
-        t.ok(stats.numberOfStudies > 0, 'should have at list one study');
+        t.ok(stats.numberOfStudies > 0, 'should have at least one study');
+        t.ok(stats.numberOfDistinctSources > 1, 'should have at least two sources');
         t.ok(stats.totalInteractions > 0, 'with some interaction');
         t.ok(stats.totalSourceTaxa > 0, 'and source taxa');
         t.ok(stats.totalTargetTaxa > 0, 'and target taxa');
@@ -23,9 +24,10 @@ test('find statistics across studies', function (t) {
 });
 
 test('find statistics by studies from specific source', function (t) {
-    t.plan(4);
+    t.plan(5);
     var callback = function (stats) {
-        t.ok(stats.numberOfStudies > 0, 'should have at list one study');
+        t.ok(stats.numberOfStudies > 0, 'should have at least one study');
+        t.equal(stats.numberOfDistinctSources, 1, 'should have one source');
         t.ok(stats.totalInteractions > 0, 'with some interaction');
         t.ok(stats.totalSourceTaxa > 0, 'and source taxa');
         t.ok(stats.totalTargetTaxa > 0, 'and target taxa');
