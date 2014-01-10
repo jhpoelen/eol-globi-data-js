@@ -116,7 +116,8 @@ globiData.findStudyStats = function (search, callback) {
             for (var i = 0; i < resp.data.length; i++) {
                 var row = resp.data[i];
                 var reference = '';
-				if (row.length > 8 && row[8].length > 0) {
+				var citation = row[8];
+				if (citation && citation.length > 0) {
 					reference = row[8];
 				} else {
 					reference = row[2];
@@ -126,10 +127,13 @@ globiData.findStudyStats = function (search, callback) {
                 	}
 				}
                 var stats = { reference: reference, totalInteractions: row[4], totalSourceTaxa: row[5], totalTargetTaxa: row[6]};
-				if (row.length > 9 && row[9].length > 0) {
+				var doi = row[9];
+				if (doi && doi.length > 0) {
 					stats.doi = row[9];
 				}
-				if (row.length > 10 && row[10].length > 0) {
+
+				var source = row[10];
+				if (source && source.length > 0) {
 					stats.source = row[10];
 				}
 				studyStats[i] = stats;
