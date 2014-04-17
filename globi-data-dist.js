@@ -3,7 +3,7 @@ return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof requi
 var nodeXHR = require("xmlhttprequest");
 var globiData = {};
 
-var urlPrefix = 'http://trophicgraph.com:8080';
+var urlPrefix = 'http://trophicgraph.com';
 
 globiData.urlForFindCloseTaxonMatches = function (name) {
     return urlPrefix + '/findCloseMatchesForTaxon/' + encodeURIComponent(name);

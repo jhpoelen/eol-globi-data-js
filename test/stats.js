@@ -32,7 +32,7 @@ test('find statistics by studies from specific source', function (t) {
         t.ok(stats.totalSourceTaxa > 0, 'and source taxa');
         t.ok(stats.totalTargetTaxa > 0, 'and target taxa');
     };
-    globiData.findStats({source:'SPIRE'}, callback);
+    globiData.findStats({source:'http://gomexsi.tamucc.edu'}, callback);
 });
 
 test('get statistics for studies', function (t) {
@@ -55,10 +55,10 @@ test('get statistics for studies for specific source', function (t) {
         t.ok(statList.length > 0, 'should get at least one entry');
         var stats = statList[0];
         t.ok(stats.reference, 'should have a reference');
-        t.equal(stats.source, 'SPIRE');
+        t.equal(stats.source, 'http://gomexsi.tamucc.edu');
         t.ok(stats.totalInteractions > 0, 'should get at least one interaction');
         t.ok(stats.totalSourceTaxa > 0, 'should get at least one interaction');
         t.ok(stats.totalTargetTaxa > 0, 'should get at least one interaction');
     };
-    globiData.findStudyStats({source:'SPIRE'}, callback);
+    globiData.findStudyStats({source:'http://gomexsi.tamucc.edu'}, callback);
 });
