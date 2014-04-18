@@ -1,7 +1,7 @@
 var nodeXHR = require("xmlhttprequest");
 var globiData = {};
 
-var urlPrefix = 'http://trophicgraph.com';
+var urlPrefix = 'http://api.globalbioticinteractions.org';
 
 globiData.urlForFindCloseTaxonMatches = function (name) {
     return urlPrefix + '/findCloseMatchesForTaxon/' + encodeURIComponent(name);
