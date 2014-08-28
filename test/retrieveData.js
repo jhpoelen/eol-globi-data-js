@@ -23,7 +23,7 @@ test('get information for one taxon name', function (t) {
 test('get information for two taxon names', function (t) {
     t.plan(4);
     var callback = function (taxonInfo) {
-        t.equal('Human', taxonInfo[0].commonName, 'should have a common name');
+        t.equal('Humans', taxonInfo[0].commonName, 'should have a common name');
         t.equal('Homo sapiens', taxonInfo[0].scientificName, 'should have a scientific name');
         t.equal('Hardhead Catfish', taxonInfo[1].commonName, 'should have a common name');
         t.equal('Ariopsis felis', taxonInfo[1].scientificName, 'should have a scientific name');
