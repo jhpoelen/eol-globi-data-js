@@ -13,10 +13,18 @@ test('get species interactions', function (t) {
 test('get information for one taxon name', function (t) {
     t.plan(2);
     var callback = function (taxonInfo) {
-        t.equal('Hardhead Catfish', taxonInfo.commonName, 'should have a common name');
+        t.equal('Sea Catfish', taxonInfo.commonName, 'should have a common name');
         t.equal('Ariopsis felis', taxonInfo.scientificName, 'should have a scientific name');
     };
     globiData.findTaxonInfo('Ariopsis felis', callback);
+});
+
+test('close match no path', function(t) {
+  t.plan(1);
+  var callback = function (taxonMatches) {
+    t.ok(taxonMatches.length > 0, "should have at least one match");
+  };
+  globiData.findCloseTaxonMatches('Ungusurculus komodoensis', callback);
 });
 
 
@@ -25,7 +33,7 @@ test('get information for two taxon names', function (t) {
     var callback = function (taxonInfo) {
         t.equal('Humans', taxonInfo[0].commonName, 'should have a common name');
         t.equal('Homo sapiens', taxonInfo[0].scientificName, 'should have a scientific name');
-        t.equal('Hardhead Catfish', taxonInfo[1].commonName, 'should have a common name');
+        t.equal('Sea Catfish', taxonInfo[1].commonName, 'should have a common name');
         t.equal('Ariopsis felis', taxonInfo[1].scientificName, 'should have a scientific name');
     };
     globiData.findTaxaInfo(['Homo sapiens','Ariopsis felis'], callback);
@@ -76,9 +84,9 @@ test('find close taxon matches for [Homo]', function (t) {
     });
 });
 
-test('find close taxon matches for [hardhead catfish]', function (t) {
+test('find close taxon matches for [sea catfish]', function (t) {
     t.plan(3);
-    globiData.findCloseTaxonMatches('hardhead catfish', function (closeMatches) {
+    globiData.findCloseTaxonMatches('sea catfish', function (closeMatches) {
         assertCloseMatches(t, closeMatches);
     });
 });
