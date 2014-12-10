@@ -5,7 +5,7 @@ var urlPrefix = 'http://api.globalbioticinteractions.org';
 
 globiData.urlForFindCloseTaxonMatches = function (name) {
     return urlPrefix + '/findCloseMatchesForTaxon/' + encodeURIComponent(name);
-}
+};
 
 globiData.urlForTaxonInteractionQuery = function (search) {
     var uri = urlPrefix;
@@ -25,7 +25,7 @@ globiData.urlForTaxonInteractionQuery = function (search) {
             locationQuery += elem + '=' + location[elem] + '&';
         }
         return locationQuery;
-    }
+    };
 
     uri = uri + '?type=json.v2';
     if (search.location) {
@@ -40,8 +40,7 @@ globiData.urlForTaxonInteractionQuery = function (search) {
             }
             uri = uri + taxonQuery;
         }
-
-    }
+    };
 
     addTaxonQuery(search.sourceTaxa, 'sourceTaxon');
     addTaxonQuery(search.targetTaxa, 'targetTaxon');
@@ -61,7 +60,7 @@ globiData.urlForTaxonImagesQuery = function(scientificNames) {
 		}
 	}
 	return urlPrefix + '/imagesForNames' + nameQuery;
-}
+};
 
 var createReq = function () {
     var req;
@@ -90,7 +89,7 @@ globiData.findSources = function (callback) {
         if (req.readyState === 4 && req.status === 200) {
             var result = JSON.parse(req.responseText);
             var sources = [];
-            var data = result['data'];
+            var data = result.data;
             data.forEach(function (element, index) {
                 sources[index] = element[0];
             });
@@ -136,7 +135,7 @@ globiData.findStudyStats = function (search, callback) {
 				}
 
         var externalId = row[11];
-        if (externalId && externalId.length > 0 && externalId.match('^((http)|(https))\://') !== null) {
+        if (externalId && externalId.length > 0 && externalId.match('^((http)|(https))://') !== null) {
           stats.url = externalId;
         }
 				
@@ -146,7 +145,7 @@ globiData.findStudyStats = function (search, callback) {
     }
   };
   req.send(null);
-}
+};
 
 globiData.findStats = function (search, callback) {
     var req = createReq();
@@ -167,7 +166,7 @@ globiData.findStats = function (search, callback) {
         }
     };
     req.send(null);
-}
+};
 
 globiData.findInteractionTypes = function (callback) {
     var req = createReq();
@@ -178,7 +177,7 @@ globiData.findInteractionTypes = function (callback) {
         }
     };
     req.send(null);
-}
+};
 
 globiData.findSpeciesInteractions = function (search, callback) {
     var uri = globiData.urlForTaxonInteractionQuery(search);
@@ -196,13 +195,13 @@ globiData.findSpeciesInteractions = function (search, callback) {
 globiData.findTaxonInfo = function (scientificName, callback) {
 	var uri = globiData.urlForTaxonImageQuery(scientificName);	
 	globiData.get(uri, callback);
-}
+};
 
 globiData.findTaxaInfo = function (scientificNames, callback) {
 	var uri = globiData.urlForTaxonImagesQuery(scientificNames);
 	console.log(uri);	
 	globiData.get(uri, callback);
-}
+};
 
 globiData.get = function (uri, callback) {
     var req = createReq();
