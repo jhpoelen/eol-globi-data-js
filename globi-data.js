@@ -168,27 +168,27 @@ globiData.findStats = function (search, callback) {
     req.send(null);
 };
 
+globiData.sendRequest = function(req, callback) {
+  req.onreadystatechange = function() {
+    if (req.readyState === 4 && req.status === 200) {
+      callback(JSON.parse(req.responseText));
+    }
+  };
+  req.send(null);
+};
+
 globiData.findInteractionTypes = function (callback) {
     var req = createReq();
     req.open('GET', urlPrefix + '/interactionTypes', true);
-    req.onreadystatechange = function () {
-        if (req.readyState === 4 && req.status === 200) {
-            callback(JSON.parse(req.responseText));
-        }
-    };
-    req.send(null);
+    globiData.sendRequest(req, callback);
 };
+
 
 globiData.findSpeciesInteractions = function (search, callback) {
     var uri = globiData.urlForTaxonInteractionQuery(search);
     var req = createReq();
     req.open('GET', uri, true);
-    req.onreadystatechange = function () {
-        if (req.readyState === 4 && req.status === 200) {
-            callback(JSON.parse(req.responseText));
-        }
-    };
-    req.send(null);
+    globiData.sendRequest(req, callback);
 };
 
 
@@ -206,12 +206,7 @@ globiData.findTaxaInfo = function (scientificNames, callback) {
 globiData.get = function (uri, callback) {
     var req = createReq();
     req.open('GET', uri, true);
-    req.onreadystatechange = function () {
-        if (req.readyState === 4 && req.status === 200) {
-            callback(JSON.parse(req.responseText));
-        }
-    };
-    req.send(null);
+    globiData.sendRequest(req, callback);
 };
 
 globiData.findCloseTaxonMatches = function (name, callback) {
