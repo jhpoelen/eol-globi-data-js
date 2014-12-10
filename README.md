@@ -1,4 +1,5 @@
 # eol-globi-data-js
+[![Build Status](https://travis-ci.org/jhpoelen/eol-globi-data-js.svg?branch=master)](https://travis-ci.org/jhpoelen/eol-globi-data-js)
 [![Code Climate](https://codeclimate.com/github/jhpoelen/eol-globi-data-js/badges/gpa.svg)](https://codeclimate.com/github/jhpoelen/eol-globi-data-js)
 
 A javascript libray to help find out what species interact (e.g. eats, is eaten by) with.  Data provided by EOL's GloBI (Global Biotic Interactions): http://github.com/jhpoelen/eol-globi-data/wiki .
