@@ -1,7 +1,7 @@
 # eol-globi-data-js
+[![Code Climate](https://codeclimate.com/github/jhpoelen/eol-globi-data-js/badges/gpa.svg)](https://codeclimate.com/github/jhpoelen/eol-globi-data-js)
 
-Find out what species interacts (e.g. eats, is eaten by) with other species.  Data provided by EOL's GloBI (Global Biotic Interactions): http://github.com/jhpoelen/eol-globi-data/wiki .
-
+A javascript libray to help find out what species interact (e.g. eats, is eaten by) with.  Data provided by EOL's GloBI (Global Biotic Interactions): http://github.com/jhpoelen/eol-globi-data/wiki .
 # example
 If you'd like to see more that the samples below, please see test/ and example/ directories.
 

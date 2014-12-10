@@ -40,7 +40,7 @@ globiData.urlForTaxonInteractionQuery = function (search) {
             }
             uri = uri + taxonQuery;
         }
-    };
+    }
 
     addTaxonQuery(search.sourceTaxa, 'sourceTaxon');
     addTaxonQuery(search.targetTaxa, 'targetTaxon');
@@ -220,7 +220,7 @@ globiData.findCloseTaxonMatches = function (name, callback) {
             var closeMatches = [];
             data.forEach(function (element, index) {
                 var commonNamesString = element[1];
-				commonNamesString = commonNamesString == null ? "" : commonNamesString;
+				commonNamesString = commonNamesString === null ? "" : commonNamesString;
                 var commonNamesSplit = commonNamesString.split('|');
                 var commonNames = [];
                 var taxonHierarchy = [];
@@ -231,7 +231,7 @@ globiData.findCloseTaxonMatches = function (name, callback) {
                     }
                 });
                 var pathString = element[2];
-                pathString = pathString == null ? "" : pathString;
+                pathString = pathString === null ? "" : pathString;
                 var path = pathString.split('|');
                 path.forEach(function (taxon, index) {
                     taxonHierarchy[index] = taxon.trim();
