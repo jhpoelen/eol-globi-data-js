@@ -48,7 +48,7 @@ test('find close taxon matches', function (t) {
 		var foundAtLeastSomePaths = false;
 		closeMatches.forEach(function(match) {
 			foundMuntinusCaninus = foundMuntinusCaninus || match.scientificName === 'Mutinus caninus';
-			foundAtLeastSomeCommonNames = foundAtLeastSomeCommonNames || match.commonNames.length > 0;
+			foundAtLeastSomeCommonNames = foundAtLeastSomeCommonNames || match.commonNames.count > 0;
 			foundAtLeastSomePaths = foundAtLeastSomePaths || match.path.length > 0;
 		});
         t.ok(foundMuntinusCaninus, 'expected Mutinus caninus');
@@ -64,7 +64,7 @@ var assertCloseMatches = function (t, closeMatches) {
     closeMatches.forEach(function (match, index) {
         var match = closeMatches[index];
         if (index == 0) {
-            t.ok(match.commonNames.length > 0, 'expected at least one common name');
+            t.ok(match.commonNames.count > 0, 'expected at least one common name');
             t.ok(match.path.length > 0, 'expected some parent taxa');
         }
     });
