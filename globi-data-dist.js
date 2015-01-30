@@ -51,7 +51,7 @@ globiData.urlForTaxonInteractionQuery = function (search) {
 };
 
 globiData.urlForTaxonImageQuery = function (scientificName) {
-    return urlPrefix + '/imagesForName/' + encodeURIComponent(scientificName);
+    return urlPrefix + '/imagesForName?name=' + encodeURIComponent(scientificName);
 };
 
 globiData.urlForTaxonImagesQuery = function(scientificNames) {
@@ -221,17 +221,8 @@ globiData.findCloseTaxonMatches = function (name, callback) {
             var data = response.data;
             var closeMatches = [];
             data.forEach(function (element, index) {
-                var commonNamesString = element[1];
-				commonNamesString = commonNamesString === null ? "" : commonNamesString;
-                var commonNamesSplit = commonNamesString.split('|');
-                var commonNames = [];
                 var taxonHierarchy = [];
-                commonNamesSplit.forEach(function (element, index) {
-                    var commonName = element.split('@');
-                    if (commonName.length > 1) {
-                        commonNames[index] = { name: commonName[0].trim(), lang: commonName[1].trim()};
-                    }
-                });
+                var commonNames = globiData.mapCommonNameList(element[1]);
                 var pathString = element[2];
                 pathString = pathString === null ? "" : pathString;
                 var path = pathString.split('|');
@@ -245,6 +236,35 @@ globiData.findCloseTaxonMatches = function (name, callback) {
         }
     };
     req.send(null);
+};
+
+/**
+ * Transforms a common name list string into a map
+ * f.x.:
+ *  "foo @en | bar @de" => {en: "foo", de: "bar"}
+ *
+ * @param {string} pipedCommonNameList
+ * @param {boolean} [override]
+ * @returns {Object.<string, string>}
+ */
+globiData.mapCommonNameList = function(pipedCommonNameList, override) {
+    override = typeof override !== 'undefined' ? !!override : true;
+    pipedCommonNameList = typeof pipedCommonNameList !== 'string' ? '' : pipedCommonNameList;
+    var commonNameMap = { count: 0 };
+    var splittedByPipeList = pipedCommonNameList.split('|').map(function(item) { return item.trim(); } );
+    splittedByPipeList.forEach(function(item) {
+        if (typeof item !== 'undefined') {
+            var splittedByAtItemParts = item.split('@').map(function(item) { return item.trim(); } );
+            if (typeof splittedByAtItemParts[1] !== 'undefined') {
+                if( override || typeof commonNameMap[splittedByAtItemParts[1]] === 'undefined') {
+                    if (typeof commonNameMap[splittedByAtItemParts[1]] === 'undefined') commonNameMap.count++;
+                    commonNameMap[splittedByAtItemParts[1]] = splittedByAtItemParts[0];
+                }
+            }
+        }
+    });
+
+    return commonNameMap;
 };
 
 module.exports = globiData;
