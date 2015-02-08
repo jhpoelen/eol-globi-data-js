@@ -174,12 +174,16 @@ globiData.findStats = function (search, callback) {
 };
 
 globiData.sendRequest = function(req, callback) {
-  req.onreadystatechange = function() {
-    if (req.readyState === 4 && req.status === 200) {
-      callback(JSON.parse(req.responseText));
-    }
-  };
-  req.send(null);
+    req.onreadystatechange = function() {
+        if (req.readyState === 4 && req.status === 200) {
+            if (callback.callback && callback.context) {
+                callback.callback.call(callback.context, JSON.parse(req.responseText));
+            } else {
+                callback(JSON.parse(req.responseText));
+            }
+        }
+    };
+    req.send(null);
 };
 
 globiData.findInteractionTypes = function (callback) {
