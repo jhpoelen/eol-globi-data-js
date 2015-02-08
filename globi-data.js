@@ -52,6 +52,10 @@ globiData.urlForTaxonImageQuery = function (scientificName) {
     return urlPrefix + '/imagesForName?name=' + encodeURIComponent(scientificName);
 };
 
+globiData.urlForTaxonImageByIdQuery = function(id) {
+    return urlPrefix + '/images/' + encodeURIComponent(id);
+};
+
 globiData.urlForTaxonImagesQuery = function(scientificNames) {
 	var nameQuery = '?';
 	if (scientificNames) {
@@ -263,6 +267,17 @@ globiData.mapCommonNameList = function(pipedCommonNameList, override) {
     });
 
     return commonNameMap;
+};
+
+globiData.findThumbnailById = function(search, callback) {
+    search = search || {};
+    var uri = globiData.urlForTaxonImageByIdQuery(search);
+    var req = createReq();
+    req.open('GET', uri, true);
+    globiData.sendRequest(req, function(reponseData) {
+        var tumbnailUrl = reponseData.thumbnailURL;
+        callback(tumbnailUrl);
+    });
 };
 
 module.exports = globiData;
