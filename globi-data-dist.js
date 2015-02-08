@@ -186,9 +186,22 @@ globiData.sendRequest = function(req, callback) {
     req.send(null);
 };
 
-globiData.findInteractionTypes = function (callback) {
+globiData.findInteractionTypes = function (search, callback) {
+    var urlQuery = '', alreadySet = false;
+    if (arguments.length === 1) {
+        callback = search;
+        search = {};
+    }
+
+    ['taxonId', 'taxonName'].forEach(function(queryPart) {
+        if (search[queryPart] && !alreadySet) {
+            urlQuery = '?' + queryPart + encodeURIComponent(search[queryPart]);
+            alreadySet = true;
+        }
+    });
+
     var req = createReq();
-    req.open('GET', urlPrefix + '/interactionTypes', true);
+    req.open('GET', urlPrefix + '/interactionTypes' + urlQuery, true);
     globiData.sendRequest(req, callback);
 };
 
