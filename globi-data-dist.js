@@ -187,18 +187,13 @@ globiData.sendRequest = function(req, callback) {
 };
 
 globiData.findInteractionTypes = function (search, callback) {
-    var urlQuery = '', alreadySet = false;
     if (arguments.length === 1) {
         callback = search;
-        search = {};
+        search = [];
     }
 
-    ['taxonId', 'taxonName'].forEach(function(queryPart) {
-        if (search[queryPart] && !alreadySet) {
-            urlQuery = '?' + queryPart + encodeURIComponent(search[queryPart]);
-            alreadySet = true;
-        }
-    });
+    search.map(function(item) {return 'taxon=' + encodeURIComponent(item); });
+    var urlQuery = search.length > 0 ? '?' + search.join('&') + '&type=json' : '';
 
     var req = createReq();
     req.open('GET', urlPrefix + '/interactionTypes' + urlQuery, true);
