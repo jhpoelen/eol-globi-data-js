@@ -37,3 +37,10 @@ test('url for search box location only source taxon, target taxon', function(t) 
     var search = {location: location, sourceTaxa: ['Animalia'], targetTaxa: ['Insecta']};
 	t.equal(globiData.urlForTaxonInteractionQuery(search), 'http://api.globalbioticinteractions.org/interaction?type=json.v2&nw_lat=41.574361&nw_lng=-125.53344800000002&se_lat=32.750323&se_lng=-114.74487299999998&sourceTaxon=Animalia&targetTaxon=Insecta&');
 });
+
+test('url for search box location for study stats', function(t) {
+	t.plan(1);
+    var location = {nw_lat:41.574361, nw_lng:-125.53344800000002, se_lat:32.750323, se_lng: -114.74487299999998};
+    var search = {location: location, sourceTaxa: ['Animalia'], targetTaxa: ['Insecta']};
+	t.equal(globiData.urlForStudyStats(search), 'http://api.globalbioticinteractions.org/contributors?&nw_lat=41.574361&nw_lng=-125.53344800000002&se_lat=32.750323&se_lng=-114.74487299999998&sourceTaxon=Animalia&targetTaxon=Insecta&');
+});

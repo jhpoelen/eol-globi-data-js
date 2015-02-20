@@ -3,22 +3,7 @@ var globiData = {};
 
 var urlPrefix = 'http://api.globalbioticinteractions.org';
 
-globiData.urlForFindCloseTaxonMatches = function (name) {
-    return urlPrefix + '/findCloseMatchesForTaxon/' + encodeURIComponent(name);
-};
-
-globiData.urlForTaxonInteractionQuery = function (search) {
-    var uri = urlPrefix;
-
-    if (search.sourceTaxonScientificName) {
-        uri = uri + '/taxon/' + encodeURIComponent(search.sourceTaxonScientificName) + '/' + search.interactionType;
-        if (search.targetTaxonScientificName) {
-            uri = uri + '/' + encodeURIComponent(search.targetTaxonScientificName);
-        }
-    } else {
-        uri = uri + '/interaction';
-    }
-
+var addQueryParams = function(uri, search) {
     var locationQuery = function (location) {
         var locationQuery = '';
         for (var elem in location) {
@@ -27,7 +12,6 @@ globiData.urlForTaxonInteractionQuery = function (search) {
         return locationQuery;
     };
 
-    uri = uri + '?type=json.v2';
     if (search.location) {
         uri = uri + '&' + locationQuery(search.location);
     }
@@ -45,7 +29,29 @@ globiData.urlForTaxonInteractionQuery = function (search) {
     addTaxonQuery(search.sourceTaxa, 'sourceTaxon');
     addTaxonQuery(search.targetTaxa, 'targetTaxon');
 
+    if (search.source) {
+        uri = uri + 'source=' + encodeURIComponent(search.source);
+    }
     return uri;
+};
+
+globiData.urlForFindCloseTaxonMatches = function (name) {
+    return urlPrefix + '/findCloseMatchesForTaxon/' + encodeURIComponent(name);
+};
+
+globiData.urlForTaxonInteractionQuery = function (search) {
+    var uri = urlPrefix;
+
+    if (search.sourceTaxonScientificName) {
+        uri = uri + '/taxon/' + encodeURIComponent(search.sourceTaxonScientificName) + '/' + search.interactionType;
+        if (search.targetTaxonScientificName) {
+            uri = uri + '/' + encodeURIComponent(search.targetTaxonScientificName);
+        }
+    } else {
+        uri = uri + '/interaction';
+    }
+    uri = uri + '?type=json.v2';
+    return addQueryParams(uri, search);
 };
 
 globiData.urlForTaxonImageQuery = function (scientificName) {
@@ -64,6 +70,10 @@ globiData.urlForTaxonImagesQuery = function(scientificNames) {
 		}
 	}
 	return urlPrefix + '/imagesForNames' + nameQuery;
+};
+
+globiData.urlForStudyStats = function(search) {
+    return addQueryParams(urlPrefix + '/contributors?', search);
 };
 
 var createReq = function () {
@@ -105,11 +115,9 @@ globiData.findSources = function (callback) {
 
 globiData.findStudyStats = function (search, callback) {
     var req = createReq();
-    var uri = urlPrefix + '/contributors';
-    if (search.source) {
-        uri = uri + '?source=' + encodeURIComponent(search.source);
-    }
+    var uri = globiData.urlForStudyStats(search);
     req.open('GET', uri, true);
+
     req.onreadystatechange = function () {
         if (req.readyState === 4 && req.status === 200) {
             var resp = JSON.parse(req.responseText);
