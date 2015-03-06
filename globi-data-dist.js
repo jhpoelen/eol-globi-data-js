@@ -22,8 +22,8 @@ var addQueryParams = function(uri, search) {
         uri = uri + '&includeObservations=true';
     }
 
-    if (search.studyId) {
-        uri = uri + '&studyId=' + encodeURIComponent(search.studyId);
+    if (search.referenceId) {
+        uri = uri + '&referenceId=' + encodeURIComponent(search.referenceId);
     }
 
     function addTaxonQuery(taxonNames, elemName) {
