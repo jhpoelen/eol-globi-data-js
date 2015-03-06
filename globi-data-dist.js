@@ -18,6 +18,14 @@ var addQueryParams = function(uri, search) {
         uri = uri + '&' + locationQuery(search.location);
     }
 
+    if (search.includeObservations) {
+        uri = uri + '&includeObservations=true';
+    }
+
+    if (search.studyId) {
+        uri = uri + '&studyId=' + encodeURIComponent(search.studyId);
+    }
+
     function addTaxonQuery(taxonNames, elemName) {
         if (taxonNames) {
             var taxonQuery = '';
