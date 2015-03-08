@@ -56,3 +56,12 @@ test('url for search box location for study stats', function(t) {
     var search = {location: location, sourceTaxa: ['Animalia'], targetTaxa: ['Insecta']};
 	t.equal(globiData.urlForStudyStats(search), 'http://api.globalbioticinteractions.org/contributors?&nw_lat=41.574361&nw_lng=-125.53344800000002&se_lat=32.750323&se_lng=-114.74487299999998&sourceTaxon=Animalia&targetTaxon=Insecta');
 });
+
+
+test('url for interaction - different result types', function(t) {
+    t.plan(2);
+    var searchWithResultTypeJson = {'sourceTaxonScientificName': 'Homo sapiens', 'interactionType': 'preysOn', 'resultType': 'json'};
+    t.equal(globiData.urlForTaxonInteractionQuery(searchWithResultTypeJson), 'http://api.globalbioticinteractions.org/taxon/Homo%20sapiens/preysOn?type=json');
+    var searchWithNoSpecificResultType = {'sourceTaxonScientificName': 'Homo sapiens', 'interactionType': 'preysOn'};
+    t.equal(globiData.urlForTaxonInteractionQuery(searchWithNoSpecificResultType), 'http://api.globalbioticinteractions.org/taxon/Homo%20sapiens/preysOn?type=json.v2');
+});

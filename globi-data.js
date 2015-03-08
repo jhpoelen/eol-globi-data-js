@@ -66,7 +66,7 @@ globiData.urlForTaxonInteractionQuery = function (search) {
     } else {
         uri = uri + '/interaction';
     }
-    uri = uri + '?type=json.v2';
+    uri = uri + '?type=' + (search.resultType ? search.resultType : 'json.v2');
     return addQueryParams(uri, search);
 };
 
