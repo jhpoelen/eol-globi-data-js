@@ -7,13 +7,13 @@ var addQueryParams = function(uri, search) {
     var locationQuery = function (location) {
         var locationQuery = '';
         for (var elem in location) {
-            locationQuery += elem + '=' + location[elem] + '&';
+            locationQuery +=  '&' + elem + '=' + location[elem];
         }
         return locationQuery;
     };
 
     if (search.location) {
-        uri = uri + '&' + locationQuery(search.location);
+        uri = uri + locationQuery(search.location);
     }
 
     if (search.includeObservations) {
@@ -24,11 +24,15 @@ var addQueryParams = function(uri, search) {
         uri = uri + '&referenceId=' + encodeURIComponent(search.referenceId);
     }
 
+    if (search.interactionType) {
+        uri = uri + '&interactionType=' + encodeURIComponent(search.interactionType);
+    }
+
     function addTaxonQuery(taxonNames, elemName) {
         if (taxonNames) {
             var taxonQuery = '';
             for (var name in taxonNames) {
-                taxonQuery += elemName + '=' + encodeURIComponent(taxonNames[name]) + '&';
+                taxonQuery += '&' + elemName + '=' + encodeURIComponent(taxonNames[name]);
             }
             uri = uri + taxonQuery;
         }
@@ -51,7 +55,11 @@ globiData.urlForTaxonInteractionQuery = function (search) {
     var uri = urlPrefix;
 
     if (search.sourceTaxonScientificName) {
-        uri = uri + '/taxon/' + encodeURIComponent(search.sourceTaxonScientificName) + '/' + search.interactionType;
+        uri = uri + '/taxon/' + encodeURIComponent(search.sourceTaxonScientificName);
+        if (search.interactionType) {
+            uri = uri + '/' + encodeURIComponent(search.interactionType);
+            delete search.interactionType;
+        }
         if (search.targetTaxonScientificName) {
             uri = uri + '/' + encodeURIComponent(search.targetTaxonScientificName);
         }
