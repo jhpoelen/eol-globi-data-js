@@ -71,3 +71,9 @@ test('url with fields', function(t) {
     var searchWithResultTypeJson = {'sourceTaxa': ['Homo sapiens'], 'interactionType': 'preysOn', 'fields': ['interaction_type', 'source_taxon_name']};
     t.equal(globiData.urlForTaxonInteractionQuery(searchWithResultTypeJson), 'http://api.globalbioticinteractions.org/interaction?type=json.v2&interactionType=preysOn&sourceTaxon=Homo%20sapiens&field=interaction_type&field=source_taxon_name');
 });
+
+test('url with bbox', function(t) {
+    t.plan(1);
+    var searchWithBBoxSet = {'bbox': '42,23,100,100'};
+    t.equal(globiData.urlForTaxonInteractionQuery(searchWithBBoxSet), 'http://api.globalbioticinteractions.org/interaction?type=json.v2&bbox=42,23,100,100');
+});

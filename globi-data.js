@@ -14,6 +14,10 @@ var addQueryParams = function (uri, search) {
             return locationQuery;
         };
 
+        if (search.bbox) {
+            uri = uri + '&bbox=' + search.bbox;
+        }
+
         if (search.location) {
             uri = uri + locationQuery(search.location);
         }
