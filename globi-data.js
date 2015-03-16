@@ -26,8 +26,8 @@ var addQueryParams = function (uri, search) {
             uri = uri + '&includeObservations=true';
         }
 
-        if (search.referenceId) {
-            uri = uri + '&referenceId=' + encodeURIComponent(search.referenceId);
+        if (search.accordingTo) {
+            uri = uri + '&accordingTo=' + encodeURIComponent(search.accordingTo);
         }
 
         if (search.interactionType) {

@@ -36,10 +36,10 @@ test('url for interaction location include observations', function(t) {
 	t.equal(globiData.urlForTaxonInteractionQuery(search), 'http://api.globalbioticinteractions.org/interaction?type=json.v2&includeObservations=true');
 });
 
-test('url for interactions by study externalId', function(t) {
+test('url for interactions according to', function(t) {
 	t.plan(1);
-    var search = {'referenceId' : 'http://inaturalist.org/observations/123'};
-	t.equal(globiData.urlForTaxonInteractionQuery(search), 'http://api.globalbioticinteractions.org/interaction?type=json.v2&referenceId=http%3A%2F%2Finaturalist.org%2Fobservations%2F123');
+    var search = {'accordingTo' : 'http://inaturalist.org/observations/123'};
+	t.equal(globiData.urlForTaxonInteractionQuery(search), 'http://api.globalbioticinteractions.org/interaction?type=json.v2&accordingTo=http%3A%2F%2Finaturalist.org%2Fobservations%2F123');
 });
 
 
