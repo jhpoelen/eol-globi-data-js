@@ -36,6 +36,12 @@ test('url for interaction location include observations', function(t) {
 	t.equal(globiData.urlForTaxonInteractionQuery(search), 'http://api.globalbioticinteractions.org/interaction?type=json.v2&includeObservations=true');
 });
 
+test('url for interaction exact name matches only', function(t) {
+	t.plan(1);
+    var search = {'exactNameMatchOnly' : true};
+	t.equal(globiData.urlForTaxonInteractionQuery(search), 'http://api.globalbioticinteractions.org/interaction?type=json.v2&exactNameMatchOnly=true');
+});
+
 test('url for interactions according to', function(t) {
 	t.plan(1);
     var search = {'accordingTo' : 'http://inaturalist.org/observations/123'};

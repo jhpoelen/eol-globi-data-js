@@ -3,7 +3,7 @@ var test = require('tape');
 
 test('get species interactions', function (t) {
     t.plan(1);
-    var search = {sourceTaxonScientificName: 'Ariopsis felis', interactionType: 'preysOn'};
+    var search = {sourceTaxonScientificName: 'Ariopsis felis', interactionType: 'eats'};
     var callback = function (interactions) {
         t.ok(interactions.length > 0, 'should get at least one interaction');
     };

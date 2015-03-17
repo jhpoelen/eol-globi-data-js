@@ -26,6 +26,10 @@ var addQueryParams = function (uri, search) {
             uri = uri + '&includeObservations=true';
         }
 
+        if (search.exactNameMatchOnly) {
+            uri = uri + '&exactNameMatchOnly=true';
+        }
+
         if (search.accordingTo) {
             uri = uri + '&accordingTo=' + encodeURIComponent(search.accordingTo);
         }
