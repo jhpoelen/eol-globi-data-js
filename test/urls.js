@@ -65,9 +65,15 @@ test('url for search box location for study stats', function(t) {
 
 
 test('url for interaction - different result types', function(t) {
-    t.plan(2);
+    t.plan(5);
     var searchWithResultTypeJson = {'sourceTaxonScientificName': 'Homo sapiens', 'interactionType': 'preysOn', 'resultType': 'json'};
     t.equal(globiData.urlForTaxonInteractionQuery(searchWithResultTypeJson), 'http://api.globalbioticinteractions.org/taxon/Homo%20sapiens/preysOn?type=json');
+    var searchWithResultTypeCsv = {'sourceTaxonScientificName': 'Homo sapiens', 'interactionType': 'preysOn', 'resultType': 'csv'};
+    t.equal(globiData.urlForTaxonInteractionQuery(searchWithResultTypeCsv), 'http://api.globalbioticinteractions.org/taxon/Homo%20sapiens/preysOn.csv?type=csv');
+    var searchWithResultTypeDot = {'sourceTaxonScientificName': 'Homo sapiens', 'interactionType': 'preysOn', 'resultType': 'dot'};
+    t.equal(globiData.urlForTaxonInteractionQuery(searchWithResultTypeDot), 'http://api.globalbioticinteractions.org/taxon/Homo%20sapiens/preysOn.dot?type=dot');
+    searchWithResultTypeCsv = {'sourceTaxa': ['Homo sapiens'], 'interactionType': 'preysOn', 'resultType': 'csv'};
+    t.equal(globiData.urlForTaxonInteractionQuery(searchWithResultTypeCsv), 'http://api.globalbioticinteractions.org/interaction.csv?type=csv&interactionType=preysOn&sourceTaxon=Homo%20sapiens');
     var searchWithNoSpecificResultType = {'sourceTaxonScientificName': 'Homo sapiens', 'interactionType': 'preysOn'};
     t.equal(globiData.urlForTaxonInteractionQuery(searchWithNoSpecificResultType), 'http://api.globalbioticinteractions.org/taxon/Homo%20sapiens/preysOn?type=json.v2');
 });
