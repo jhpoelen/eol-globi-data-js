@@ -30,6 +30,10 @@ var addQueryParams = function (uri, search) {
             uri = uri + '&exactNameMatchOnly=true';
         }
 
+        if (search.excludeChildTaxa) {
+            uri = uri + '&excludeChildTaxa=true';
+        }
+
         if (search.accordingTo) {
             uri = uri + '&accordingTo=' + encodeURIComponent(search.accordingTo);
         }
