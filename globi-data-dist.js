@@ -113,7 +113,11 @@ globiData.urlForTaxonImagesQuery = function (scientificNames) {
 };
 
 globiData.urlForStudyStats = function (search) {
-    return addQueryParams(urlPrefix + '/contributors?', search);
+    var url = urlPrefix + '/reports/studies';
+    if (search.source) {
+        url = url + '?source=' + encodeURIComponent(search.source);
+    }
+    return url;
 };
 
 var createReq = function () {
@@ -138,14 +142,14 @@ var createReq = function () {
 
 globiData.findSources = function (callback) {
     var req = createReq();
-    req.open('GET', urlPrefix + '/sources', true);
+    req.open('GET', urlPrefix + '/reports/sources', true);
     req.onreadystatechange = function () {
         if (req.readyState === 4 && req.status === 200) {
             var result = JSON.parse(req.responseText);
             var sources = [];
             var data = result.data;
             data.forEach(function (element, index) {
-                sources[index] = element[0];
+                sources[index] = element[4];
             });
             callback(sources);
         }
@@ -164,29 +168,13 @@ globiData.findStudyStats = function (search, callback) {
             var studyStats = [];
             for (var i = 0; i < resp.data.length; i++) {
                 var row = resp.data[i];
-                var reference = '';
-                var citation = row[8];
-                if (citation && citation.length > 0) {
-                    reference = row[8];
-                } else {
-                    reference = row[2];
-                    var name = row[3];
-                    if (name && name.length > 0) {
-                        reference = name + ' ' + reference;
-                    }
-                }
-                var stats = { reference: reference, totalInteractions: row[4], totalSourceTaxa: row[5], totalTargetTaxa: row[6]};
-                var doi = row[9];
+                var stats = { citation: row[0], source: row[3], totalInteractions: row[4], totalTaxa: row[5]};
+                var doi = row[2];
                 if (doi && doi.length > 0) {
                     stats.doi = doi;
                 }
 
-                var source = row[10];
-                if (source && source.length > 0) {
-                    stats.source = source;
-                }
-
-                var externalId = row[11];
+                var externalId = row[1];
                 if (externalId && externalId.length > 0 && externalId.match('^((http)|(https))://') !== null) {
                     stats.url = externalId;
                 }
@@ -201,7 +189,7 @@ globiData.findStudyStats = function (search, callback) {
 
 globiData.findStats = function (search, callback) {
     var req = createReq();
-    var uri = urlPrefix + '/info';
+    var uri = urlPrefix + '/reports/collections';
     if (search.source) {
         uri = uri + '?source=' + encodeURIComponent(search.source);
     }
@@ -209,11 +197,10 @@ globiData.findStats = function (search, callback) {
     req.onreadystatechange = function () {
         if (req.readyState === 4 && req.status === 200) {
             var resp = JSON.parse(req.responseText);
-            var stats = {numberOfStudies: resp.data[0][0],
-                totalInteractions: resp.data[0][1],
-                totalSourceTaxa: resp.data[0][2],
-                totalTargetTaxa: resp.data[0][3],
-                numberOfDistinctSources: resp.data[0][4]};
+            var stats = {numberOfStudies: resp.data[0][6],
+                totalInteractions: resp.data[0][4],
+                totalTaxa: resp.data[0][5],
+                numberOfDistinctSources: resp.data[0][7]};
             callback(stats);
         }
     };
