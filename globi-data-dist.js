@@ -5,7 +5,7 @@ var globiData = {};
 
 var urlPrefix = 'http://api.globalbioticinteractions.org';
 
-var addQueryParams = function (uri, search) {
+globiData.addQueryParams = function (uri, search) {
         var locationQuery = function (location) {
             var locationQuery = '';
             for (var elem in location) {
@@ -44,7 +44,7 @@ var addQueryParams = function (uri, search) {
             uri = uri + '&interactionType=' + encodeURIComponent(search.interactionType);
         }
 
-        function addQueryParams(taxonNames, elemName) {
+        function addQueryParamsLocal(taxonNames, elemName) {
             if (taxonNames) {
                 var taxonQuery = '';
                 for (var name in taxonNames) {
@@ -56,9 +56,9 @@ var addQueryParams = function (uri, search) {
             }
         }
 
-        addQueryParams(search.sourceTaxa, 'sourceTaxon');
-        addQueryParams(search.targetTaxa, 'targetTaxon');
-        addQueryParams(search.fields, 'field');
+        addQueryParamsLocal(search.sourceTaxa, 'sourceTaxon');
+        addQueryParamsLocal(search.targetTaxa, 'targetTaxon');
+        addQueryParamsLocal(search.fields, 'field');
 
         if (search.source) {
             uri = uri + 'source=' + encodeURIComponent(search.source);
@@ -89,7 +89,7 @@ globiData.urlForTaxonInteractionQuery = function (search) {
     var ext = {'csv': '.csv', 'dot': '.dot'}
     uri = uri + (ext[search.resultType] === undefined ? '' : ext[search.resultType]);
     uri = uri + '?type=' + (search.resultType ? search.resultType : 'json.v2');
-    return addQueryParams(uri, search);
+    return this.addQueryParams(uri, search);
 };
 
 globiData.urlForTaxonImageQuery = function (scientificName) {
