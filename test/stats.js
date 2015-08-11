@@ -28,8 +28,8 @@ test('get statistics for studies', function (t) {
         var stats = statList[0];
         t.ok(stats.citation, 'should have a reference');
         t.ok(stats.source, 'should have a source');
-        t.ok(stats.totalInteractions > 0, 'should get at least one interaction');
-        t.ok(stats.totalTaxa > 0, 'should get at least one interaction');
+        t.ok(stats.totalInteractions >= 0, 'should have zero or more interactions');
+        t.ok(stats.totalTaxa >= 0, 'should have zero or more taxa');
     };
     globiData.findStudyStats({}, callback);
 });

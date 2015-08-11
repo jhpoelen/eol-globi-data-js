@@ -13,10 +13,10 @@ test('get species interactions', function (t) {
 test('get information for one taxon name', function (t) {
     t.plan(2);
     var callback = function (taxonInfo) {
-        t.ok(taxonInfo.commonName.match('catfish'));
-        t.equal('Ariopsis felis', taxonInfo.scientificName, 'should have a scientific name');
+        t.ok(taxonInfo.commonName.match('Humans'));
+        t.equal('Homo sapiens', taxonInfo.scientificName, 'should have a scientific name');
     };
-    globiData.findTaxonInfo('Ariopsis felis', callback);
+    globiData.findTaxonInfo('Homo sapiens', callback);
 });
 
 test('close match no path', function(t) {
@@ -29,12 +29,10 @@ test('close match no path', function(t) {
 
 
 test('get information for two taxon names', function (t) {
-    t.plan(4);
+    t.plan(2);
     var callback = function (taxonInfo) {
         t.equal('Humans', taxonInfo[0].commonName, 'should have a common name');
         t.equal('Homo sapiens', taxonInfo[0].scientificName, 'should have a scientific name');
-        t.ok(taxonInfo[1].commonName.match('catfish'), 'should have a common name');
-        t.equal('Ariopsis felis', taxonInfo[1].scientificName, 'should have a scientific name');
     };
     globiData.findTaxaInfo(['Homo sapiens','Ariopsis felis'], callback);
 });
