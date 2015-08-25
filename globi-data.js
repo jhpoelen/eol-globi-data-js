@@ -1,69 +1,50 @@
-var nodeXHR = require("xmlhttprequest");
+var nodeXHR = require('xmlhttprequest');
+var extend = require('extend');
+var querystring = require('querystring');
 var globiData = {};
 
 var urlPrefix = 'http://api.globalbioticinteractions.org';
 
 globiData.addQueryParams = function (uri, search) {
-        var locationQuery = function (location) {
-            var locationQuery = '';
-            for (var elem in location) {
-                if (location.hasOwnProperty(elem)) {
-                    locationQuery += '&' + elem + '=' + location[elem];
-                }
-            }
-            return locationQuery;
-        };
-
-        if (search.bbox) {
-            uri = uri + '&bbox=' + search.bbox;
-        }
-
+    function initParams(search) {
+        var alt = extend({}, search);
         if (search.location) {
-            uri = uri + locationQuery(search.location);
+            alt = extend(alt, search.location);
+            delete alt.location;
         }
+
+        function replaceAndDelete(match, replace) {
+            if (search[match]) {
+                if (!alt[replace]) {
+                    alt[replace] = search[match];
+                }
+                delete alt[match];
+            }
+        }
+
+        replaceAndDelete('sourceTaxa', 'sourceTaxon');
+        replaceAndDelete('targetTaxa', 'targetTaxon');
+        replaceAndDelete('fields', 'field');
 
         if (search.includeObservations) {
-            uri = uri + '&includeObservations=true';
+            alt.includeObservations = true;
         }
-
         if (search.exactNameMatchOnly) {
-            uri = uri + '&exactNameMatchOnly=true';
+            alt.exactNameMatchOnly = true;
         }
-
         if (search.excludeChildTaxa) {
-            uri = uri + '&excludeChildTaxa=true';
+            alt.excludeChildTaxa = true;
         }
-
-        if (search.accordingTo) {
-            uri = uri + '&accordingTo=' + encodeURIComponent(search.accordingTo);
-        }
-
-        if (search.interactionType) {
-            uri = uri + '&interactionType=' + encodeURIComponent(search.interactionType);
-        }
-
-        function addQueryParamsLocal(taxonNames, elemName) {
-            if (taxonNames) {
-                var taxonQuery = '';
-                for (var name in taxonNames) {
-                    if (taxonNames.hasOwnProperty(name)) {
-                        taxonQuery += '&' + elemName + '=' + encodeURIComponent(taxonNames[name]);
-                    }
-                }
-                uri = uri + taxonQuery;
-            }
-        }
-
-        addQueryParamsLocal(search.sourceTaxa, 'sourceTaxon');
-        addQueryParamsLocal(search.targetTaxa, 'targetTaxon');
-        addQueryParamsLocal(search.fields, 'field');
-
-        if (search.source) {
-            uri = uri + 'source=' + encodeURIComponent(search.source);
-        }
-        return uri;
+        return alt;
     }
-    ;
+    var qs = querystring.encode(initParams(search));
+    var altUri = uri;
+    if (qs.length > 0) {
+        altUri = uri + '&' + qs;
+    }
+    return altUri;
+}
+;
 
 globiData.urlForFindCloseTaxonMatches = function (name) {
     return urlPrefix + '/findCloseMatchesForTaxon/' + encodeURIComponent(name);
@@ -71,23 +52,28 @@ globiData.urlForFindCloseTaxonMatches = function (name) {
 
 globiData.urlForTaxonInteractionQuery = function (search) {
     var uri = urlPrefix;
+    var searchAlt = extend({}, search);
 
-    if (search.sourceTaxonScientificName) {
-        uri = uri + '/taxon/' + encodeURIComponent(search.sourceTaxonScientificName);
-        if (search.interactionType) {
-            uri = uri + '/' + encodeURIComponent(search.interactionType);
-            delete search.interactionType;
+    if (searchAlt.sourceTaxonScientificName) {
+        uri = uri + '/taxon/' + encodeURIComponent(searchAlt.sourceTaxonScientificName);
+        delete searchAlt.sourceTaxonScientificName;
+        if (searchAlt.interactionType) {
+            uri = uri + '/' + encodeURIComponent(searchAlt.interactionType);
+            delete searchAlt.interactionType;
         }
-        if (search.targetTaxonScientificName) {
-            uri = uri + '/' + encodeURIComponent(search.targetTaxonScientificName);
+        if (searchAlt.targetTaxonScientificName) {
+            uri = uri + '/' + encodeURIComponent(searchAlt.targetTaxonScientificName);
+            delete searchAlt.targetTaxonScientificName;
         }
     } else {
         uri = uri + '/interaction';
     }
     var ext = {'csv': '.csv', 'dot': '.dot'}
-    uri = uri + (ext[search.resultType] === undefined ? '' : ext[search.resultType]);
-    uri = uri + '?type=' + (search.resultType ? search.resultType : 'json.v2');
-    return this.addQueryParams(uri, search);
+    uri = uri + (ext[searchAlt.resultType] === undefined ? '' : ext[searchAlt.resultType]);
+    uri = uri + '?type=' + (searchAlt.resultType ? searchAlt.resultType : 'json.v2');
+    delete searchAlt.resultType;
+
+    return this.addQueryParams(uri, searchAlt);
 };
 
 globiData.urlForTaxonImageQuery = function (scientificName) {

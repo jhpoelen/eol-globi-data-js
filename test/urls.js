@@ -76,8 +76,26 @@ test('url with fields', function(t) {
     t.equal(globiData.urlForTaxonInteractionQuery(searchWithResultTypeJson), 'http://api.globalbioticinteractions.org/interaction?type=json.v2&interactionType=preysOn&sourceTaxon=Homo%20sapiens&field=interaction_type&field=source_taxon_name');
 });
 
+test('url with taxon array', function(t) {
+    t.plan(1);
+    var searchWithResultTypeJson = { sourceTaxon: ['Homo sapiens'], interactionType: 'preysOn'};
+    t.equal(globiData.urlForTaxonInteractionQuery(searchWithResultTypeJson), 'http://api.globalbioticinteractions.org/interaction?type=json.v2&sourceTaxon=Homo%20sapiens&interactionType=preysOn');
+});
+
+test('url with taxon value', function(t) {
+    t.plan(1);
+    var searchWithResultTypeJson = { sourceTaxon: 'Homo sapiens', interactionType: 'preysOn'};
+    t.equal(globiData.urlForTaxonInteractionQuery(searchWithResultTypeJson), 'http://api.globalbioticinteractions.org/interaction?type=json.v2&sourceTaxon=Homo%20sapiens&interactionType=preysOn');
+});
+
+test('url with taxa and taxon array', function(t) {
+    t.plan(1);
+    var searchWithResultTypeJson = { sourceTaxa: ['Ariopsis felis'], sourceTaxon: ['Homo sapiens'], interactionType: 'preysOn'};
+    t.equal(globiData.urlForTaxonInteractionQuery(searchWithResultTypeJson), 'http://api.globalbioticinteractions.org/interaction?type=json.v2&sourceTaxon=Homo%20sapiens&interactionType=preysOn');
+});
+
 test('url with bbox', function(t) {
     t.plan(1);
     var searchWithBBoxSet = {'bbox': '42,23,100,100'};
-    t.equal(globiData.urlForTaxonInteractionQuery(searchWithBBoxSet), 'http://api.globalbioticinteractions.org/interaction?type=json.v2&bbox=42,23,100,100');
+    t.equal(globiData.urlForTaxonInteractionQuery(searchWithBBoxSet), 'http://api.globalbioticinteractions.org/interaction?type=json.v2&bbox=42%2C23%2C100%2C100');
 });
