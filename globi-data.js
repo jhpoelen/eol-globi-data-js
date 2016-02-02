@@ -234,6 +234,11 @@ globiData.findTaxonInfo = function (scientificName, callback) {
     globiData.get(uri, callback);
 };
 
+globiData.findTaxonLinks = function(scientificName, callback) {
+  var uri = urlPrefix + '/taxonLinks/' + encodeURIComponent(scientificName);
+  globiData.get(uri, callback);
+}
+
 globiData.findTaxaInfo = function (scientificNames, callback) {
     var uri = globiData.urlForTaxonImagesQuery(scientificNames);
     console.log(uri);
