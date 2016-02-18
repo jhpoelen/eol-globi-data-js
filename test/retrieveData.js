@@ -35,7 +35,7 @@ test('get species interactions using nodes/links json format', function (t) {
 
 test('get species interactions using nodes/links json format using bbox', function (t) {
     t.plan(8);
-    var search = { bbox: '3.36,50.75,7.23,53.59', resultType: 'd3'};
+    var search = { bbox: '3.36,50.75,7.23,53.59', limit: 10, resultType: 'd3'};
     var callback = function (interactions) {
         var links = interactions.links;
         var nodes = interactions.nodes;
