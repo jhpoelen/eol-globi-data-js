@@ -1,6 +1,6 @@
 {
   "name": "globi-data",
-  "version": "0.0.45",
+  "version": "0.0.46",
   "description": "Find out who eats who in the world: what do rats (Rattus rattus) eat?, or what do hardhead catfish (Ariopsis felis) eat?. Data provided by EOL's GloBI (Global Biotic Interactions) http://github.com/jhpoelen/eol-globi-data .",
   "main": "globi-data.js",
   "directories": {
@@ -8,16 +8,22 @@
   },
   "dependencies": {
     "extend": "^3.0.0",
+    "object-hash": "^1.1.2",
     "querystring": "^0.2.0",
     "xmlhttprequest": "~1.6.0"
   },
   "devDependencies": {
-        "tape": "~1.0.4",
-        "testling": "~1.5.3"
+    "tape": "~1.0.4",
+    "testling": "~1.5.3"
   },
   "testling": {
     "files": "test/*.js",
-        "browsers": [ "ie8", "ie9", "ff/13", "chrome/20" ]
+    "browsers": [
+      "ie8",
+      "ie9",
+      "ff/13",
+      "chrome/20"
+    ]
   },
   "scripts": {
     "test": "testling",

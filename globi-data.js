@@ -1,5 +1,6 @@
 var nodeXHR = require('xmlhttprequest');
 var extend = require('extend');
+var hash = require('object-hash');
 var querystring = require('querystring');
 var globiData = {};
 
@@ -37,6 +38,7 @@ globiData.addQueryParams = function (uri, search) {
         }
         return alt;
     }
+
     var qs = querystring.encode(initParams(search));
     var altUri = uri;
     if (qs.length > 0) {
@@ -222,10 +224,18 @@ globiData.findInteractionTypes = function (search, callback) {
 
 
 globiData.findSpeciesInteractions = function (search, callback) {
-    var uri = globiData.urlForTaxonInteractionQuery(search);
+    var searchAlt = extend({}, search);
+    var callbackAlt = callback;
+    if ('d3' === searchAlt.resultType) {
+        searchAlt.resultType = 'json';
+        callbackAlt = function(interactions) {
+            callback(callbackProxyForD3(interactions));
+        }
+    }
+    var uri = globiData.urlForTaxonInteractionQuery(searchAlt);
     var req = createReq();
     req.open('GET', uri, true);
-    globiData.sendRequest(req, callback);
+    globiData.sendRequest(req, callbackAlt);
 };
 
 
@@ -234,14 +244,13 @@ globiData.findTaxonInfo = function (scientificName, callback) {
     globiData.get(uri, callback);
 };
 
-globiData.findTaxonLinks = function(scientificName, callback) {
-  var uri = urlPrefix + '/taxonLinks/' + encodeURIComponent(scientificName);
-  globiData.get(uri, callback);
+globiData.findTaxonLinks = function (scientificName, callback) {
+    var uri = urlPrefix + '/taxonLinks/' + encodeURIComponent(scientificName);
+    globiData.get(uri, callback);
 }
 
 globiData.findTaxaInfo = function (scientificNames, callback) {
     var uri = globiData.urlForTaxonImagesQuery(scientificNames);
-    console.log(uri);
     globiData.get(uri, callback);
 };
 
@@ -322,4 +331,71 @@ globiData.findThumbnailById = function (search, callback) {
     });
 };
 
+var callbackProxyForD3 = function (interactions) {
+    var columnNames = interactions.columns || [];
+    var sourceTaxonIds = columnNames.map(function (elem, i) {
+        if (elem.indexOf('source_') === -1) {
+            return -1;
+        } else {
+            return i;
+        }
+    }).filter(function (i) {
+        return i !== -1;
+    });
+
+    var targetTaxonIds = columnNames.map(function (elem, i) {
+        if (elem.indexOf('target_') === -1) {
+            return -1;
+        } else {
+            return i;
+        }
+    }).filter(function (i) {
+        return i !== -1;
+    });
+
+    var linkIds = columnNames.map(function (elem, i) {
+        if ((elem.indexOf('target_') === -1) && (elem.indexOf('source_') === -1)) {
+            return i;
+        } else {
+            return -1;
+        }
+    }).filter(function (i) {
+        return i !== -1;
+    });
+
+    var data = interactions.data || [];
+    var linksAndNodes = data.reduce(function (agg, row) {
+        var sourceTaxon = sourceTaxonIds.reduce(function (sourceObj, i) {
+            if (row[i] !== null) {
+                sourceObj[columnNames[i].substring('source_'.length)] = row[i];
+            }
+            return sourceObj;
+        }, {});
+        var targetTaxon = targetTaxonIds.reduce(function (targetObj, i) {
+            if (row[i] !== null) {
+                targetObj[columnNames[i].substring('target_'.length)] = row[i];
+            }
+            return targetObj;
+        }, {});
+        var link = linkIds.reduce(function (linkObj, i) {
+            linkObj[columnNames[i]] = row[i];
+            return linkObj;
+        }, { source: hash(sourceTaxon), target: hash(targetTaxon) });
+        agg.linksHash[hash(link)] = link;
+        agg.nodeHash[hash(sourceTaxon)] = sourceTaxon;
+        agg.nodeHash[hash(targetTaxon)] = targetTaxon;
+        return agg;
+    }, { linksHash: {}, nodeHash: {}});
+
+
+    var links = Object.keys(linksAndNodes.linksHash).map(function (i) {
+        return linksAndNodes.linksHash[i];
+    });
+    var nodes = Object.keys(linksAndNodes.nodeHash).map(function (i) {
+        return linksAndNodes.nodeHash[i];
+    });
+    return { links: links, nodes: nodes};
+}
+
 module.exports = globiData;
+
