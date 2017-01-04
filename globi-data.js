@@ -133,6 +133,7 @@ globiData.findSources = function (callback) {
     req.onreadystatechange = function () {
         if (req.readyState === 4 && req.status === 200) {
             var result = JSON.parse(req.responseText);
+            var citations = citation.extractCitations(result);
             callback(citation.extractCitations(result));
         }
     };
@@ -140,10 +141,10 @@ globiData.findSources = function (callback) {
 };
 
 globiData.findSourceNames = function (callback) {
-   globiData.findSources(new function(sourceCitations) {
+   globiData.findSources(function(sourceCitations) {
      callback(citation.parseSourceCitations(sourceCitations));
   });
-}
+};
 
 globiData.findStudyStats = function (search, callback) {
     var req = createReq();
