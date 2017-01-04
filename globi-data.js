@@ -143,6 +143,55 @@ globiData.findSources = function (callback) {
     req.send(null);
 };
 
+globiData.extractGithubRepos = function(citation) {
+  var githubUrl = /https:\/\/github\.com\/([^\/]+)\/([^\/]+)\/archive.*\.zip/g;
+  var urls = citation.match(githubUrl);
+  if (urls === null) {
+    urls = [];
+  }
+  return urls.map(function(url) { return { name: url.replace(githubUrl, '$1/$2') }; });
+};
+
+globiData.extractZenodoDOI = function(citation) {
+  var zenodoUrl = /https:\/\/zenodo\.org\/record\/([^\/]+)\/files\/([^\/]+)\/([^\/]+)-/g;
+  var urls = citation.match(zenodoUrl);
+  if (urls === null) {
+    urls = [];
+  }
+  return urls.map(function(url) { return { doi: url.replace(zenodoUrl, '10.5281/zenodo.$1'), name: url.replace(zenodoUrl, '$2/$3') }; });
+};
+
+globiData.parseSourceCitations = function(sources, sourceCitationIndex) {
+  var sourceCitations = sources.data.reduce(function(agg, row) { return agg.concat(row[sourceCitationIndex]); }, []);
+  var repos = sourceCitations.map(globiData.extractZenodoDOI).concat(sourceCitations.map(globiData.extractGithubRepos)).reduce(function(agg, repo) { return agg.concat(repo); }, []);
+
+  var repoHash = repos.reduce(function(agg, repo) { 
+    if (repo.name !== undefined) {
+      var repoValue = agg[repo.name];
+      if (repoValue === undefined) {
+        agg[repo.name] = repo;
+      }
+    }
+    return agg;
+  }, {}); 
+  return Object.keys(repoHash).map(function(key) { return repoHash[key]; });
+};
+
+globiData.parseSourceNames = function(citationData) {
+  var citationIndex = citationData.columns.indexOf('study_source_citation');
+  var sourceNames = [];
+  if (citationIndex !== -1) {
+    sourceNames = globiData.parseSourceCitations(citationData, citationIndex);
+  }
+  return sourceNames;
+};
+
+globiData.findSourceNames = function (callback) {
+   globiData.findSources(new function(sources) {
+     callback(parseSourceNames(sources));    
+  });
+}
+
 globiData.findStudyStats = function (search, callback) {
     var req = createReq();
     var uri = globiData.urlForStudyStats(search);
