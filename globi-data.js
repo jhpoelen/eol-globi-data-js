@@ -2,6 +2,7 @@ var nodeXHR = require('xmlhttprequest');
 var extend = require('extend');
 var hash = require('object-hash');
 var querystring = require('querystring');
+var citation = require('./citation.js');
 var globiData = {};
 
 var urlPrefix = 'http://api.globalbioticinteractions.org';
@@ -132,63 +133,15 @@ globiData.findSources = function (callback) {
     req.onreadystatechange = function () {
         if (req.readyState === 4 && req.status === 200) {
             var result = JSON.parse(req.responseText);
-            var sources = [];
-            var data = result.data;
-            data.forEach(function (element, index) {
-                sources[index] = element[4];
-            });
-            callback(sources);
+            callback(citation.extractCitations(result));
         }
     };
     req.send(null);
 };
 
-globiData.extractGithubRepos = function(citation) {
-  var githubUrl = /https:\/\/github\.com\/([^\/]+)\/([^\/]+)\/archive.*\.zip/g;
-  var urls = citation.match(githubUrl);
-  if (urls === null) {
-    urls = [];
-  }
-  return urls.map(function(url) { return { name: url.replace(githubUrl, '$1/$2') }; });
-};
-
-globiData.extractZenodoDOI = function(citation) {
-  var zenodoUrl = /https:\/\/zenodo\.org\/record\/([^\/]+)\/files\/([^\/]+)\/([^\/]+)-/g;
-  var urls = citation.match(zenodoUrl);
-  if (urls === null) {
-    urls = [];
-  }
-  return urls.map(function(url) { return { doi: url.replace(zenodoUrl, '10.5281/zenodo.$1'), name: url.replace(zenodoUrl, '$2/$3') }; });
-};
-
-globiData.parseSourceCitations = function(sources, sourceCitationIndex) {
-  var sourceCitations = sources.data.reduce(function(agg, row) { return agg.concat(row[sourceCitationIndex]); }, []);
-  var repos = sourceCitations.map(globiData.extractZenodoDOI).concat(sourceCitations.map(globiData.extractGithubRepos)).reduce(function(agg, repo) { return agg.concat(repo); }, []);
-
-  var repoHash = repos.reduce(function(agg, repo) { 
-    if (repo.name !== undefined) {
-      var repoValue = agg[repo.name];
-      if (repoValue === undefined) {
-        agg[repo.name] = repo;
-      }
-    }
-    return agg;
-  }, {}); 
-  return Object.keys(repoHash).map(function(key) { return repoHash[key]; });
-};
-
-globiData.parseSourceNames = function(citationData) {
-  var citationIndex = citationData.columns.indexOf('study_source_citation');
-  var sourceNames = [];
-  if (citationIndex !== -1) {
-    sourceNames = globiData.parseSourceCitations(citationData, citationIndex);
-  }
-  return sourceNames;
-};
-
 globiData.findSourceNames = function (callback) {
-   globiData.findSources(new function(sources) {
-     callback(globiData.parseSourceNames(sources));    
+   globiData.findSources(new function(sourceCitations) {
+     callback(citation.parseSourceCitations(sourceCitations));
   });
 }
 
