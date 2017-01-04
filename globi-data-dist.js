@@ -189,7 +189,7 @@ globiData.parseSourceNames = function(citationData) {
 
 globiData.findSourceNames = function (callback) {
    globiData.findSources(new function(sources) {
-     callback(parseSourceNames(sources));    
+     callback(globiData.parseSourceNames(sources));    
   });
 }
 
