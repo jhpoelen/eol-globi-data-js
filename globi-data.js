@@ -2,7 +2,7 @@ var nodeXHR = require('xmlhttprequest');
 var extend = require('extend');
 var hash = require('object-hash');
 var querystring = require('querystring');
-var citation = require('./citation.js');
+var citation = require('citation.js');
 var globiData = {};
 
 var urlPrefix = 'http://api.globalbioticinteractions.org';
