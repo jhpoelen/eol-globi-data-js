@@ -3,6 +3,7 @@ var extend = require('extend');
 var hash = require('object-hash');
 var querystring = require('querystring');
 var citation = require('./citation.js');
+var request = require('request');
 var globiData = {};
 
 var urlPrefix = 'http://api.globalbioticinteractions.org';
@@ -133,7 +134,6 @@ globiData.findSources = function (callback) {
     req.onreadystatechange = function () {
         if (req.readyState === 4 && req.status === 200) {
             var result = JSON.parse(req.responseText);
-            var citations = citation.extractCitations(result);
             callback(citation.extractCitations(result));
         }
     };
@@ -141,9 +141,24 @@ globiData.findSources = function (callback) {
 };
 
 globiData.findSourceNames = function (callback) {
-   globiData.findSources(function(sourceCitations) {
-     callback(citation.parseSourceCitations(sourceCitations));
-  });
+    request({ method: 'GET'
+        , uri: urlPrefix + '/source/?type=json.v2'
+        , gzip: true
+    }, function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+            var sources = JSON.parse(body);
+            var sourceNames = sources.map(function(source) {
+                if (source.study_source_id !== undefined) {
+                    source.name = source.study_source_id.replace('globi:', '');
+                }
+                if (source.study_source_doi !== undefined) {
+                    source.doi = source.study_source_doi;
+                }
+                return source;
+            });
+            callback(sourceNames);
+        }
+    });
 };
 
 globiData.findStudyStats = function (search, callback) {
