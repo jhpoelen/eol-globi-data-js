@@ -28,7 +28,7 @@
   },
   "scripts": {
     "test": "testling",
-    "prepublish": "browserify . --standalone globi-data -o globi-data-dist.js"
+    "_prepublish": "browserify . --standalone globi-data -o globi-data-dist.js"
   },
   "repository": {
     "type": "git",
