@@ -14,16 +14,15 @@
     "xmlhttprequest": "~1.8.0"
   },
   "devDependencies": {
-    "tape": "~1.0.4",
-    "testling": "~1.5.3"
+    "tape": "^4.6.3",
+    "testling": "^1.7.1"
   },
   "testling": {
     "files": "test/*.js",
     "browsers": [
-      "ie8",
-      "ie9",
-      "ff/13",
-      "chrome/20"
+      "opera",
+      "ff",
+      "chrome"
     ]
   },
   "scripts": {

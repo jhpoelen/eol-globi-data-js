@@ -22,12 +22,11 @@ test('find statistics across studies', function (t) {
 });
 
 test('get statistics for studies', function (t) {
-    t.plan(5);
+    t.plan(4);
     var callback = function (statList) {
         t.ok(statList.length > 0, 'should get at least one entry');
         var stats = statList[0];
         t.ok(stats.citation, 'should have a reference');
-        t.ok(stats.source, 'should have a source');
         t.ok(stats.totalInteractions >= 0, 'should have zero or more interactions');
         t.ok(stats.totalTaxa >= 0, 'should have zero or more taxa');
     };

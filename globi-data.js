@@ -143,6 +143,7 @@ globiData.findSources = function (callback) {
 globiData.findSourceNames = function (callback) {
     request({ method: 'GET'
         , uri: urlPrefix + '/source/?type=json.v2'
+        , withCredentials: false
         , gzip: true
     }, function (error, response, body) {
         if (!error && response.statusCode == 200) {
