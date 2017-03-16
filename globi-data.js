@@ -141,24 +141,34 @@ globiData.findSources = function (callback) {
 };
 
 globiData.findSourceNames = function (callback) {
-    request({ method: 'GET'
-        , uri: urlPrefix + '/source/?type=json.v2'
-        , withCredentials: false
-        , gzip: true
-    }, function (error, response, body) {
-        if (!error && response.statusCode == 200) {
-            var sources = JSON.parse(body);
-            var sourceNames = sources.map(function(source) {
-                if (source.study_source_id !== undefined) {
-                    source.name = source.study_source_id.replace('globi:', '');
-                }
-                if (source.study_source_doi !== undefined) {
-                    source.doi = source.study_source_doi;
-                }
-                return source;
-            });
-            callback(sourceNames);
-        }
+    function lookupSources(path, callback) {
+        request({ method: 'GET',
+            uri: urlPrefix + path,
+            withCredentials: false,
+            gzip: true
+        }, function (error, response, body) {
+            if (!error && response.statusCode == 200) {
+                var sources = JSON.parse(body);
+                var sourceNames = sources.map(function (source) {
+                    if (source.study_source_id !== undefined) {
+                        source.name = source.study_source_id.replace('globi:', '');
+                    }
+                    if (source.study_source_doi !== undefined) {
+                        source.doi = source.study_source_doi;
+                    }
+                    return source;
+                });
+                callback(sourceNames);
+            }
+        });
+    }
+
+    lookupSources('/source/?type=json.v2', function(sourceNames) {
+        lookupSources('/dataset/?type=json.v2', function(sourcesAll) {
+            var sourceNamespacesWithReport = sourceNames.map(function(source) { return source.name; });
+            var sourcesNoReport = sourcesAll.filter(function(source) { return sourceNamespacesWithReport.indexOf(source.name) !== -1; })
+            callback(sourceNames.concat(sourcesNoReport));
+        });
     });
 };
 
