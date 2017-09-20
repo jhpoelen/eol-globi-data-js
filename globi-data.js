@@ -6,7 +6,7 @@ var citation = require('./citation.js');
 var request = require('request');
 var globiData = {};
 
-var urlPrefix = 'http://api.globalbioticinteractions.org';
+var urlPrefix = 'https://api.globalbioticinteractions.org';
 
 globiData.addQueryParams = function (uri, search) {
     function initParams(search) {
