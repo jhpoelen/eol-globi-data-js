@@ -74,7 +74,7 @@ test('close match no path', function (t) {
 test('get information for two taxon names', function (t) {
     t.plan(2);
     var callback = function (taxonInfo) {
-        t.equal('Humans', taxonInfo[0].commonName, 'should have a common name');
+        t.equal(taxonInfo[0].commonName, 'human', 'should have a common name');
         t.equal('Homo sapiens', taxonInfo[0].scientificName, 'should have a scientific name');
     };
     globiData.findTaxaInfo(['EOL:327955', 'Ariopsis felis'], callback);
@@ -96,40 +96,3 @@ test('find close taxon matches', function (t) {
     };
     globiData.findCloseTaxonMatches('Dog', callback);
 });
-
-var assertCloseMatches = function (t, closeMatches) {
-    t.ok(closeMatches.length > 0, 'found at least one match');
-    closeMatches.forEach(function (match, index) {
-        var match = closeMatches[index];
-        if (index == 0) {
-            t.ok(match.commonNames.count > 0, 'expected at least one common name');
-            t.ok(match.path.length > 0, 'expected some parent taxa');
-        }
-    });
-};
-
-test('find close taxon matches [Homo s]', function (t) {
-    t.plan(3);
-    globiData.findCloseTaxonMatches('Homo s', function (closeMatches) {
-        assertCloseMatches(t, closeMatches);
-    });
-});
-
-test('find close taxon matches for [Homo]', function (t) {
-    t.plan(3);
-    globiData.findCloseTaxonMatches('Homo', function (closeMatches) {
-        assertCloseMatches(t, closeMatches);
-    });
-});
-
-test('find close taxon matches for [sea catfish]', function (t) {
-    t.plan(3);
-    globiData.findCloseTaxonMatches('sea catfish', function (closeMatches) {
-        assertCloseMatches(t, closeMatches);
-    });
-});
-
-
-
-
-

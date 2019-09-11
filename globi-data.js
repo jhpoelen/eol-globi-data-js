@@ -83,7 +83,7 @@ globiData.urlForTaxonInteractionQuery = function (search) {
 globiData.urlForTaxonImageQuery = function (scientificName, opts) {
     var suffix = '';
     if (opts && opts.lang) {
-        suffix = '?lang=' + encodeURIComponent(opts.lang);
+        suffix = '&lang=' + encodeURIComponent(opts.lang);
     }
     return urlPrefix + '/imagesForName?name=' + encodeURIComponent(scientificName) + suffix;
 };
