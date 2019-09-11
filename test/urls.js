@@ -6,6 +6,11 @@ test('url for taxon info', function(t) {
 	t.equal(globiData.urlForTaxonImageQuery('Homo sapiens'), 'https://api.globalbioticinteractions.org/imagesForName?name=Homo%20sapiens');
 });
 
+test('url for taxon info with preferred language', function(t) {
+	t.plan(1);
+	t.equal(globiData.urlForTaxonImageQuery('Homo sapiens', { 'lang': 'en' }), 'https://api.globalbioticinteractions.org/imagesForName?name=Homo%20sapiens&lang=en');
+});
+
 test('url for interaction no target', function(t) {
 	t.plan(1);
     var search = {'sourceTaxonScientificName': 'Homo sapiens', 'interactionType': 'preysOn'};

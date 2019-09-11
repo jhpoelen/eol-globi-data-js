@@ -80,8 +80,12 @@ globiData.urlForTaxonInteractionQuery = function (search) {
     return this.addQueryParams(uri, searchAlt);
 };
 
-globiData.urlForTaxonImageQuery = function (scientificName) {
-    return urlPrefix + '/imagesForName?name=' + encodeURIComponent(scientificName);
+globiData.urlForTaxonImageQuery = function (scientificName, opts) {
+    var suffix = '';
+    if (opts && opts.lang) {
+        suffix = '?lang=' + encodeURIComponent(opts.lang);
+    }
+    return urlPrefix + '/imagesForName?name=' + encodeURIComponent(scientificName) + suffix;
 };
 
 globiData.urlForTaxonImageByIdQuery = function (id) {
@@ -269,9 +273,13 @@ globiData.findSpeciesInteractions = function (search, callback) {
 };
 
 
-globiData.findTaxonInfo = function (scientificName, callback) {
-    var uri = globiData.urlForTaxonImageQuery(scientificName);
+globiData.findTaxon = function(scientificName, opts, callback) { 
+    var uri = globiData.urlForTaxonImageQuery(scientificName, opts);
     globiData.get(uri, callback);
+}
+
+globiData.findTaxonInfo = function (scientificName, callback) {
+    globiData.findTaxon(scientificName, { lang: "en" }, callback);
 };
 
 globiData.findTaxonLinks = function (scientificName, callback) {
