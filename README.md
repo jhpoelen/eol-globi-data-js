@@ -5,7 +5,7 @@
 [![NPM](https://nodei.co/npm-dl/globi-data.png?months=6&height=3)](https://www.npmjs.com/package/object-hash)
 
 
-A javascript libray to help find out what species interact (e.g. eats, is eaten by) with.  Data provided by EOL's GloBI (Global Biotic Interactions): http://github.com/jhpoelen/eol-globi-data/wiki .
+A javascript libray to help find out what species interact (e.g. eats, is eaten by) with. Data provided via Global Biotic Interactions (GloBI, https://globalbioticinteractions.org).
 
 # example
 If you'd like to see more that the samples below, please see test/ and example/ directories.
