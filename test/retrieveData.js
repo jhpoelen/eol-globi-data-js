@@ -74,7 +74,7 @@ test('close match no path', function (t) {
 test('get information for two taxon names', function (t) {
     t.plan(2);
     var callback = function (taxonInfo) {
-        t.equal(taxonInfo[0].commonName, 'human', 'should have a common name');
+        t.equal(taxonInfo[0].commonName.toLowerCase(), 'human', 'should have a common name');
         t.equal('Homo sapiens', taxonInfo[0].scientificName, 'should have a scientific name');
     };
     globiData.findTaxaInfo(['EOL:327955', 'Ariopsis felis'], callback);
